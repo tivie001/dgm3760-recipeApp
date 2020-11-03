@@ -1,0 +1,19 @@
+{
+  "name": "recipe-app",
+  "version": "1.0.0",
+  "description": "Full stack web recipe app (i.e. Vanilla HTML, CSS, & JS, NodeJS server (ExpressJS), & MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tivie001/dgm3760-recipeApp.git"
+  },
+  "author": "Tyler Ivie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tivie001/dgm3760-recipeApp/issues"
+  },
+  "homepage": "https://github.com/tivie001/dgm3760-recipeApp#readme"
+}
