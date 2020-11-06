@@ -29,3 +29,36 @@
     display: block;
     background: rgba(0, 0, 0, 0.3);
 }
+
+/*======== TABLE STYLES ========*/
+.subtitle-name {
+    color: #868686;
+}
+.details-row {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    color: #868686;
+    font-variant: all-small-caps;
+    text-align: center;
+}
+.featured-details {
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    margin: 0;
+    font-variant: normal;
+}
+.card-image {
+    height: 200px;
+}
+.card-title {
+    font-family: Raleway;
+    padding-left: 1.2rem;
+}
+.card-title h2 {
+    margin-bottom: 0;
+}
+.card-title h4 {
+    margin-top: 0;
+}

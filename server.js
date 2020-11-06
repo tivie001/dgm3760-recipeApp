@@ -18,7 +18,11 @@ app.listen(process.env.PORT || 3000, () =>{
 // ============== RECIPE APP CRUD METHODS =============
 // ============== (GET) ALL RECIPES =============
 app.get('/api', (req, res) => {
-
+    Recipe.find((err, recipes) => {
+        if (err)
+            console.log(handleError(err));
+        res.json(recipes);
+    })
 })
 
 

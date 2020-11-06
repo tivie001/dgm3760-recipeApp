@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>"Made This Myself!" - Recipe Web App</title>
+    <title>Recipe Web App</title>
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -26,10 +26,10 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-amber.min.css" />
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="index.js"></script>
+
   </head>
-  <body>
+  <body onload="getRecipes()">
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
@@ -76,51 +76,18 @@
         </div>
         <div class="main-container">
           <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-              <div class="demo-card-wide mdl-card mdl-shadow--2dp" id="myRecipesCard">
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">My Recipes</h2>
-                </div>
-                <div class="mdl-card__supporting-text">
-                  Ready to cook? Browse, add, update recipes here.
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
-                     href="recipes.html">
-                    Browse Recipes
-                  </a>
-                </div>
-                <div class="mdl-card__menu">
-                  <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                    <i class="material-icons">add_circle</i>
-                  </button>
-                </div>
-              </div>
+            <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
+              <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable">
+                <tbody id="recipe-name-table"></tbody>
+              </table>
             </div>
-            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
-              <div class="demo-card-wide mdl-card mdl-shadow--2dp" id="myListsCard">
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">My Lists</h2>
-                </div>
-                <div class="mdl-card__supporting-text">
-                  Ready to shop? View all your shopping lists here.
-                </div>
-                <div class="mdl-card__actions mdl-card--border">
-                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                    View Lists
-                  </a>
-                </div>
-                <div class="mdl-card__menu">
-                  <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                    <i class="material-icons">share</i>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" id="cardContainer"></div>
           </div>
         </div>
       </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
   </body>
 </html>
