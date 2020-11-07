@@ -62,3 +62,18 @@
 .card-title h4 {
     margin-top: 0;
 }
+
+/*======== DIALOG STYLES ========*/
+.add-recipe-dialog {
+    width: 600px;
+    height: 500px;
+    overflow-y: scroll;
+}
+.extrawide-textarea{
+    width: 100%;
+}
+.single-line-textboxes {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+}

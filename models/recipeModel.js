@@ -6,8 +6,10 @@ const RecipeSchema = new Schema({
     subTitle: String,
     rating: String,
     prepDetails: String,
-    prepTime: String,
-    totalTime: String,
+    prepHours: String,
+    prepMins: String,
+    totalHours: String,
+    totalMins: String,
     difficulty: String,
     ingredients: Array,
     directions: Array
