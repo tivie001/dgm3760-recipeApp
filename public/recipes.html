@@ -54,15 +54,15 @@
           </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
-          <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">menu_book</i>My Recipes</a>
+          <a class="mdl-navigation__link" href="index.html"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
+          <a class="mdl-navigation__link" href="recipes.html"><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">menu_book</i>My Recipes</a>
           <div class="mdl-layout-spacer"></div>
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
         </nav>
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
         <div class="image-container">
-          <img class="header-image" src="images/header-image.jpg" alt="Fruit bowl on a table"/>
+<!--          <img class="header-image" src="images/header-image.jpg" alt="Fruit bowl on a table"/>-->
           <div class="after"></div>
         </div>
         <div class="main-container">
@@ -72,7 +72,7 @@
                 Add New Recipe <i class="material-icons">add_circle</i>
               </button>
               <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable" style="margin-top: 1.5rem">
-                <tbody id="recipe-name-table"></tbody>
+                <tbody id="recipeNameTable"></tbody>
               </table>
             </div>
             <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" id="cardContainer"></div>
@@ -88,7 +88,7 @@
             <form id="addRecipeForm" enctype="multipart/form-data">
 <!--              <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label custom-file">-->
 <!--                <input class="mdl-textfield__input custom-file-input" type="file" name="file" id="file">-->
-<!--&lt;!&ndash;                <label for="file" class="custom-file-label">Choose File</label>&ndash;&gt;-->
+<!--                <label for="file" class="custom-file-label">Choose File</label>-->
 <!--                <p id="b64" style="display: none"></p>-->
 <!--                <img id="img" height="150">-->
 <!--              </div>-->
@@ -184,7 +184,6 @@
           </div>
         </dialog>
         <!--==================== END OF RECIPE FORM ====================-->
-
       </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -194,17 +193,7 @@
 
     <body>
     <script>
-      var dialog = document.querySelector('dialog');
-      var showDialogButton = document.querySelector('#show-dialog');
-      if (! dialog.showModal) {
-        dialogPolyfill.registerDialog(dialog);
-      }
-      showDialogButton.addEventListener('click', function() {
-        dialog.showModal();
-      });
-      dialog.querySelector('.close').addEventListener('click', function() {
-        dialog.close();
-      });
+
     </script>
     </body>
   </body>

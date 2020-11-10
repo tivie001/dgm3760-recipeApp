@@ -29,6 +29,15 @@
     display: block;
     background: rgba(0, 0, 0, 0.3);
 }
+.list-card {
+    background: #37474F;
+}
+.list-card-header {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+}
 
 /*======== TABLE STYLES ========*/
 .subtitle-name {

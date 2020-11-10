@@ -12,7 +12,11 @@ const RecipeSchema = new Schema({
     totalMins: String,
     difficulty: String,
     ingredients: Array,
-    directions: Array
+    directions: Array,
+    // img: {
+    //     data: Buffer,
+    //     contentType: String
+    // }
 })
 
 module.exports = mongoose.model('Recipe', RecipeSchema);

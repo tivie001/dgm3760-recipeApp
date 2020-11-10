@@ -1,6 +1,8 @@
 const url = 'http://localhost:3000'
 let recipes = [];
-const form = document.querySelector('#addRecipeForm');
+let lists = [];
+const recipeForm = document.querySelector('#addRecipeForm');
+const listForm = document.querySelector('#addListForm');
 
 function getRecipes() {
     axios.get('/api')
@@ -30,7 +32,7 @@ function getRecipes() {
                                 </td>
                               </tr>`
             })
-            document.getElementById("recipe-name-table").innerHTML = tableRows;
+            document.getElementById("recipeNameTable").innerHTML = tableRows;
         })
         .catch(function (error) {
             console.log(error);
@@ -46,9 +48,8 @@ function getRecipeDetails(id) {
     let directionStr ='';
 
     recipeDetails[0].ingredients.forEach((ingredient) => {
-        console.log(ingredient);
         if (ingredient !== null || ingredient !== undefined)
-            ingredientStr += `<li>${ingredient}</li>`
+            ingredientStr += `<li style="padding-top: 7px">${ingredient}</li>`
     })
     recipeDetails[0].directions.forEach((direction, index) => {
         if (direction !== null || direction !== undefined)
@@ -117,63 +118,61 @@ function getRecipeDetails(id) {
 // }
 
 // ******* ADD RECIPE (POST) *******
-// if (form) {
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const ingredients = [];
-        const directions = [];
-        const title = document.querySelector("#title").value;
-        const subTitle = document.querySelector("#subTitle").value;
-        const totalHours = document.querySelector("#totalHours").value;
-        const totalMins = document.querySelector("#totalMins").value;
-        const rating = document.querySelector("#rating").value;
-        const difficulty = document.querySelector("#difficulty").value;
-        const prepHours = document.querySelector("#prepHours").value;
-        const prepMins = document.querySelector("#prepMins").value;
-        const prepDetails = document.querySelector("#prepDetails").value;
-        // const imagePath = document.getElementById("b64").innerHTML;
+recipeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const ingredients = [];
+    const directions = [];
+    const title = document.querySelector("#title").value;
+    const subTitle = document.querySelector("#subTitle").value;
+    const totalHours = document.querySelector("#totalHours").value;
+    const totalMins = document.querySelector("#totalMins").value;
+    const rating = document.querySelector("#rating").value;
+    const difficulty = document.querySelector("#difficulty").value;
+    const prepHours = document.querySelector("#prepHours").value;
+    const prepMins = document.querySelector("#prepMins").value;
+    const prepDetails = document.querySelector("#prepDetails").value;
+    // const imagePath = document.getElementById("b64").innerHTML;
 
-        let ingreds, i, steps, x;
-        ingreds = document.querySelectorAll(".ingredient");
-        steps = document.querySelectorAll(".direction");
-        for (i = 0; i < ingreds.length; i++) {
-            ingredients.push(ingreds[i].value);
+    let ingreds, i, steps, x;
+    ingreds = document.querySelectorAll(".ingredient");
+    steps = document.querySelectorAll(".direction");
+    for (i = 0; i < ingreds.length; i++) {
+        ingredients.push(ingreds[i].value);
+    }
+    for (x = 0; x < steps.length; x++) {
+        directions.push(steps[x].value);
+    }
+    const bodyData = {
+        title,
+        subTitle,
+        totalHours,
+        totalMins,
+        rating,
+        difficulty,
+        prepHours,
+        prepMins,
+        prepDetails,
+        ingredients,
+        directions
+    };
+    if (title && subTitle) {
+        async function addRecipe() {
+            const response = await fetch(`${url}/api/addRecipe`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bodyData)
+            });
+            const recipes = await response.json();
+            return recipes;
         }
-        for (x = 0; x < steps.length; x++) {
-            directions.push(steps[x].value);
-        }
-        const bodyData = {
-            title,
-            subTitle,
-            totalHours,
-            totalMins,
-            rating,
-            difficulty,
-            prepHours,
-            prepMins,
-            prepDetails,
-            ingredients,
-            directions
-        };
-        if (title && subTitle) {
-            async function addRecipe() {
-                const response = await fetch(`${url}/api/addRecipe`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(bodyData)
-                });
-                const recipes = await response.json();
-                return recipes;
-            }
-            addRecipe().then((recipes) => {
-                document.getElementById("recipe-name-table").innerHTML = getRecipes(recipes);
-            })
-        }
+        addRecipe().then((recipes) => {
+            document.getElementById("recipeNameTable").innerHTML = getRecipes(recipes);
+        })
+    }
 
-    });
-// }
+});
 
 
 function addIngredient() {
@@ -198,3 +197,100 @@ function addDirections() {
     directionsContainer.removeAttribute("data-upgraded");
     componentHandler.upgradeDom();
 }
+
+var dialog = document.querySelector('dialog');
+var showDialogButton = document.querySelector('#show-dialog');
+if (! dialog.showModal) {
+    dialogPolyfill.registerDialog(dialog);
+}
+showDialogButton.addEventListener('click', function() {
+    dialog.showModal();
+});
+dialog.querySelector('.close').addEventListener('click', function() {
+    dialog.close();
+});
+
+
+
+
+
+function getLists() {
+    axios.get('/api/lists')
+        .then(function (response) {
+            let tableRows = [];
+            const myLists = response.data;
+            console.log(myLists);
+            myLists.forEach((list) => {
+                lists.push(list);
+                tableRows += `<div class="demo-card-wide mdl-card mdl-shadow--2dp" id="${list._id}" onclick="getListDetails(this.id)">
+                            <div class="mdl-card__title list-card">
+                                <h2 class="mdl-card__title-text"><i class="material-icons" style="padding-right: 1rem">shopping_cart</i>Shopping List</h2>
+                            </div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onclick="get">
+                                    View List
+                                </button>
+                            </div>
+                        </div>`
+            })
+            document.getElementById("listCards").innerHTML = tableRows;
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+}
+
+function getListDetails(id) {
+    const listDetails = lists.filter((list) => list._id === id);
+    document.getElementById("listDetailsContainer").innerHTML = '';
+    console.log(listDetails);
+
+    document.getElementById("listDetailsContainer").innerHTML +=
+        `<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+            <thead>
+               <tr>
+                <th class="mdl-data-table__cell--non-numeric">
+                    Item Name
+                </th>
+               </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
+                </tr>
+            </tbody>
+        </table>`
+}
+
+listForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const listTitle = document.querySelector("#title").value;
+    const name = document.querySelector("#taskName").value;
+
+    const bodyData = {
+        listTitle,
+        items
+    };
+    if (listTitle) {
+        async function addRecipe() {
+            const response = await fetch(`${url}/api/addList`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bodyData)
+            });
+            const lists = await response.json();
+            return lists;
+        }
+        addRecipe().then((lists) => {
+            document.getElementById("listCards").innerHTML = getLists(lists);
+        })
+    }
+});

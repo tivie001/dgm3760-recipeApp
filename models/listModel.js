@@ -1,23 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const RecipeSchema = new Schema({
-    title: String,
-    subTitle: String,
-    rating: String,
-    prepDetails: String,
-    prepHours: String,
-    prepMins: String,
-    totalHours: String,
-    totalMins: String,
-    difficulty: String,
-    ingredients: Array,
-    directions: Array,
-    // img: {
-    //     data: Buffer,
-    //     contentType: String
-    // }
+const ListSchema = new Schema({
+    listTitle: String,
+    items: Array
 })
 
-module.exports = mongoose.model('Recipe', RecipeSchema);
+module.exports = mongoose.model('List', ListSchema);
 

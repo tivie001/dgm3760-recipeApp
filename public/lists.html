@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="styles.css">
 
   </head>
-  <body onload="getRecipes()">
+  <body onload="getLists()">
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
@@ -60,131 +60,18 @@
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i><span class="visuallyhidden">Help</span></a>
         </nav>
       </div>
-      <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="image-container">
-<!--          <img class="header-image" src="images/header-image.jpg" alt="Fruit bowl on a table"/>-->
-          <div class="after"></div>
-        </div>
-        <div class="main-container">
-          <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet">
-              <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect">
-                Add New Recipe <i class="material-icons">add_circle</i>
-              </button>
-              <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable" style="margin-top: 1.5rem">
-                <tbody id="recipe-name-table"></tbody>
-              </table>
+        <main class="mdl-layout__content mdl-color--grey-100">
+            <div class="image-container">
+                <img class="header-image" src="images/header-image.jpg" alt="Fruit bowl on a table"/>
+                <div class="after"></div>
             </div>
-            <div class="mdl-cell mdl-cell--8-col mdl-cell--8-col-tablet" id="cardContainer"></div>
-          </div>
-        </div>
-
-        <!--==================== ADD RECIPE FORM ====================-->
-        <dialog class="mdl-dialog add-recipe-dialog">
-          <h4 class="mdl-dialog__title" style="color: #ffc439"><i class="material-icons" style="font-size: 38px; padding-right: 1rem">
-            menu_book</i>Add New Recipe
-          </h4>
-          <div class="mdl-dialog__content">
-            <form id="addRecipeForm" enctype="multipart/form-data">
-<!--              <div class="mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label custom-file">-->
-<!--                <input class="mdl-textfield__input custom-file-input" type="file" name="file" id="file">-->
-<!--                <label for="file" class="custom-file-label">Choose File</label>-->
-<!--                <p id="b64" style="display: none"></p>-->
-<!--                <img id="img" height="150">-->
-<!--              </div>-->
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide-textarea">
-                <input class="mdl-textfield__input" type="text" name="title" id="title">
-                <label class="mdl-textfield__label" for="title">Recipe Title</label>
-              </div>
-              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide-textarea">
-                <input class="mdl-textfield__input" type="text" name="subTitle" id="subTitle">
-                <label class="mdl-textfield__label" for="subTitle">Recipe Subtitle</label>
-              </div>
-              <div class="single-line-textboxes">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide-textarea">
-                  <input class="mdl-textfield__input" type="text" name="totalHours" id="totalHours">
-                  <label class="mdl-textfield__label" for="totalHours">Total Hours</label>
+            <div class="main-container">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--5-col mdl-cell--8-col-tablet" id="listCards"></div>
+                    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet" id="listDetailsContainer"></div>
                 </div>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide-textarea">
-                  <input class="mdl-textfield__input" type="text" name="totalMins" id="totalMins">
-                  <label class="mdl-textfield__label" for="totalMins">Total Minutes</label>
-                </div>
-              </div>
-              <div class="mdl-textfield mdl-js-textfield getmdl-select">
-                <input type="text" value="" class="mdl-textfield__input" id="rating" name="rating" readonly>
-                <input type="hidden" value="" name="rating">
-                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-                <label for="rating" class="mdl-textfield__label">Rating</label>
-                <ul for="sample2" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-                  <li class="mdl-menu__item" data-val="1">1 Star</li>
-                  <li class="mdl-menu__item" data-val="2">2 Stars</li>
-                  <li class="mdl-menu__item" data-val="3">3 Stars</li>
-                  <li class="mdl-menu__item" data-val="4">4 Stars</li>
-                  <li class="mdl-menu__item" data-val="5">5 Stars</li>
-                </ul>
-              </div>
-              <div class="mdl-textfield mdl-js-textfield getmdl-select">
-                <input type="text" value="" class="mdl-textfield__input" id="difficulty" readonly>
-                <input type="hidden" value="" name="difficulty">
-                <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
-                <label for="difficulty" class="mdl-textfield__label">Difficulty</label>
-                <ul for="sample2" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-                  <li class="mdl-menu__item" data-val="Easy">Easy</li>
-                  <li class="mdl-menu__item" data-val="Moderate">Moderate</li>
-                  <li class="mdl-menu__item" data-val="Hard">Hard</li>
-                </ul>
-              </div>
-              <h6>Preparation Details</h6>
-              <hr>
-              <div class="single-line-textboxes">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                    <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="prepHours" id="prepHours">
-                    <label class="mdl-textfield__label" for="prepHours">Prep Hour(s)</label>
-                    <span class="mdl-textfield__error">Input is not a number!</span>
-                </div>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="prepMins" id="prepMins">
-                  <label class="mdl-textfield__label" for="prepMins">Prep Minutes</label>
-                  <span class="mdl-textfield__error">Input is not a number!</span>
-                </div>
-              </div>
-              <div class="mdl-textfield mdl-js-textfield">
-                <textarea class="mdl-textfield__input" type="text" rows= "3" name="prepDetails" id="prepDetails"></textarea>
-                <label class="mdl-textfield__label" for="prepDetails">Preparation Summary</label>
-              </div>
-              <h6>Ingredients</h6>
-              <hr>
-              <div id="ingredients">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <input class="mdl-textfield__input ingredient" type="text" id="ingredient" name="ingredients">
-                  <label class="mdl-textfield__label" for="ingredient">New Ingredient</label>
-                </div>
-              </div>
-              <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" type="button" onclick="addIngredient()">
-                <i class="material-icons">add</i>
-              </button>
-              <h6>Directions</h6>
-              <hr>
-              <div id="directions">
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                  <input class="mdl-textfield__input direction" type="text" id="direction" name="directions">
-                  <label class="mdl-textfield__label" for="direction">New Step</label>
-                </div>
-              </div>
-              <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" type="button" onclick="addDirections()">
-                <i class="material-icons">add</i>
-              </button>
-              <div class="mdl-dialog__actions">
-                <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect">
-                  Add New Recipe
-                </button>
-                <button type="button" class="mdl-button close" style="color: red">Cancel</button>
-              </div>
-            </form>
-          </div>
-        </dialog>
-        <!--==================== END OF RECIPE FORM ====================-->
-      </main>
+            </div>
+        </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
