@@ -40,6 +40,9 @@
 }
 
 /*======== TABLE STYLES ========*/
+#listTable {
+    /*width: 100%;*/
+}
 .subtitle-name {
     color: #868686;
 }
@@ -58,6 +61,11 @@
     margin: 0;
     font-variant: normal;
 }
+.checked-off {
+    text-decoration: line-through;
+}
+
+/*======== CARD STYLES ========*/
 .card-image {
     height: 200px;
 }

@@ -61,27 +61,63 @@
         </nav>
       </div>
         <main class="mdl-layout__content mdl-color--grey-100">
-            <div class="image-container">
-                <img class="header-image" src="images/header-image.jpg" alt="Fruit bowl on a table"/>
-                <div class="after"></div>
-            </div>
             <div class="main-container">
+              <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect"
+              style="margin: 1rem 0 0 1rem">
+                Add New List <i class="material-icons">add_circle</i>
+              </button>
                 <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--5-col mdl-cell--8-col-tablet" id="listCards"></div>
-                    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet" id="listDetailsContainer"></div>
+                    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet" id="listCards"></div>
+                    <div class="mdl-cell mdl-cell--5-col mdl-cell--8-col-tablet" id="listDetailsContainer"></div>
                 </div>
             </div>
+            <!--==================== ADD RECIPE FORM ====================-->
+            <dialog class="mdl-dialog add-recipe-dialog">
+              <h4 class="mdl-dialog__title" style="color: #ffc439"><i class="material-icons" style="font-size: 38px; padding-right: 1rem">
+                list</i>Add New List
+              </h4>
+              <div class="mdl-dialog__content">
+                <form id="addListForm">
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide-textarea">
+                    <input class="mdl-textfield__input" type="text" name="title" id="listTitle">
+                    <label class="mdl-textfield__label" for="listTitle">List Title</label>
+                  </div>
+                  <div class="mdl-textfield mdl-js-textfield getmdl-select">
+                    <input type="text" value="" class="mdl-textfield__input" id="rating" name="rating" readonly>
+                    <input type="hidden" value="" name="rating">
+                    <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+                    <label for="rating" class="mdl-textfield__label">Type Of List</label>
+                    <ul for="sample2" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                      <li class="mdl-menu__item" data-val="Shopping">Shopping</li>
+                      <li class="mdl-menu__item" data-val="General">General</li>
+                    </ul>
+                  </div>
+                  <h6>Todo Items</h6>
+                  <hr>
+                  <div id="items">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input item" type="text" id="item" name="item">
+                      <label class="mdl-textfield__label" for="item">New Item</label>
+                    </div>
+                  </div>
+                  <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" type="button" onclick="addTodoItem()">
+                    <i class="material-icons">add</i>
+                  </button>
+                  <div class="mdl-dialog__actions">
+                    <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect">
+                      Add New List
+                    </button>
+                    <button type="button" class="mdl-button close" style="color: red">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </dialog>
+            <!--==================== END OF RECIPE FORM ====================-->
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script src="index.js"></script>
-
-    <body>
-    <script>
-
-    </script>
-    </body>
   </body>
 </html>

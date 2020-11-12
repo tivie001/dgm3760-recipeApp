@@ -44,8 +44,8 @@ function getRecipeDetails(id) {
     const recipeDetails = recipes.filter((recipe) => recipe._id === id);
     document.getElementById("cardContainer").innerHTML = '';
     console.log(recipeDetails);
-    let ingredientStr ='';
-    let directionStr ='';
+    let ingredientStr = '';
+    let directionStr = '';
 
     recipeDetails[0].ingredients.forEach((ingredient) => {
         if (ingredient !== null || ingredient !== undefined)
@@ -118,61 +118,64 @@ function getRecipeDetails(id) {
 // }
 
 // ******* ADD RECIPE (POST) *******
-recipeForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const ingredients = [];
-    const directions = [];
-    const title = document.querySelector("#title").value;
-    const subTitle = document.querySelector("#subTitle").value;
-    const totalHours = document.querySelector("#totalHours").value;
-    const totalMins = document.querySelector("#totalMins").value;
-    const rating = document.querySelector("#rating").value;
-    const difficulty = document.querySelector("#difficulty").value;
-    const prepHours = document.querySelector("#prepHours").value;
-    const prepMins = document.querySelector("#prepMins").value;
-    const prepDetails = document.querySelector("#prepDetails").value;
-    // const imagePath = document.getElementById("b64").innerHTML;
+if (recipeForm){
+    recipeForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const ingredients = [];
+        const directions = [];
+        const title = document.querySelector("#title").value;
+        const subTitle = document.querySelector("#subTitle").value;
+        const totalHours = document.querySelector("#totalHours").value;
+        const totalMins = document.querySelector("#totalMins").value;
+        const rating = document.querySelector("#rating").value;
+        const difficulty = document.querySelector("#difficulty").value;
+        const prepHours = document.querySelector("#prepHours").value;
+        const prepMins = document.querySelector("#prepMins").value;
+        const prepDetails = document.querySelector("#prepDetails").value;
+        // const imagePath = document.getElementById("b64").innerHTML;
 
-    let ingreds, i, steps, x;
-    ingreds = document.querySelectorAll(".ingredient");
-    steps = document.querySelectorAll(".direction");
-    for (i = 0; i < ingreds.length; i++) {
-        ingredients.push(ingreds[i].value);
-    }
-    for (x = 0; x < steps.length; x++) {
-        directions.push(steps[x].value);
-    }
-    const bodyData = {
-        title,
-        subTitle,
-        totalHours,
-        totalMins,
-        rating,
-        difficulty,
-        prepHours,
-        prepMins,
-        prepDetails,
-        ingredients,
-        directions
-    };
-    if (title && subTitle) {
-        async function addRecipe() {
-            const response = await fetch(`${url}/api/addRecipe`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(bodyData)
-            });
-            const recipes = await response.json();
-            return recipes;
+        let ingreds, i, steps, x;
+        ingreds = document.querySelectorAll(".ingredient");
+        steps = document.querySelectorAll(".direction");
+        for (i = 0; i < ingreds.length; i++) {
+            ingredients.push(ingreds[i].value);
         }
-        addRecipe().then((recipes) => {
-            document.getElementById("recipeNameTable").innerHTML = getRecipes(recipes);
-        })
-    }
+        for (x = 0; x < steps.length; x++) {
+            directions.push(steps[x].value);
+        }
+        const bodyData = {
+            title,
+            subTitle,
+            totalHours,
+            totalMins,
+            rating,
+            difficulty,
+            prepHours,
+            prepMins,
+            prepDetails,
+            ingredients,
+            directions
+        };
+        if (title && subTitle) {
+            async function addRecipe() {
+                const response = await fetch(`${url}/api/addRecipe`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bodyData)
+                });
+                const recipes = await response.json();
+                return recipes;
+            }
+            addRecipe().then((recipes) => {
+                document.getElementById("recipeNameTable").innerHTML = getRecipes(recipes);
+            })
+        }
 
-});
+    });
+}
+
 
 
 function addIngredient() {
@@ -180,7 +183,7 @@ function addIngredient() {
         '                  <input class="mdl-textfield__input ingredient" type="text" id="ingredient">\n' +
         '                  <label class="mdl-textfield__label" for="ingredient">New Ingredient</label>\n' +
         '                </div>'
-    ingredientsContainer = document.getElementById( 'ingredients' );
+    ingredientsContainer = document.getElementById( 'ingredients');
     ingredientsContainer.insertAdjacentHTML( 'beforeend', str );
     ingredientsContainer.classList.remove("is-upgraded");
     ingredientsContainer.removeAttribute("data-upgraded");
@@ -192,6 +195,17 @@ function addDirections() {
         '                  <label class="mdl-textfield__label" for="ingredient">New Step</label>\n' +
         '                </div>'
     directionsContainer = document.getElementById( 'directions');
+    directionsContainer.insertAdjacentHTML( 'beforeend', str );
+    directionsContainer.classList.remove("is-upgraded");
+    directionsContainer.removeAttribute("data-upgraded");
+    componentHandler.upgradeDom();
+}
+function addTodoItem() {
+    var str = '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">\n' +
+        '                  <input class="mdl-textfield__input item" type="text" id="item" name="item">\n' +
+        '                  <label class="mdl-textfield__label" for="item">New Item</label>\n' +
+        '                </div>'
+    directionsContainer = document.getElementById( 'items');
     directionsContainer.insertAdjacentHTML( 'beforeend', str );
     directionsContainer.classList.remove("is-upgraded");
     directionsContainer.removeAttribute("data-upgraded");
@@ -222,12 +236,12 @@ function getLists() {
             console.log(myLists);
             myLists.forEach((list) => {
                 lists.push(list);
-                tableRows += `<div class="demo-card-wide mdl-card mdl-shadow--2dp" id="${list._id}" onclick="getListDetails(this.id)">
+                tableRows += `<div class="demo-card-wide mdl-card mdl-shadow--2dp" id="${list._id}">
                             <div class="mdl-card__title list-card">
-                                <h2 class="mdl-card__title-text"><i class="material-icons" style="padding-right: 1rem">shopping_cart</i>Shopping List</h2>
+                                <h2 class="mdl-card__title-text"><i class="material-icons" style="padding-right: 1rem">shopping_cart</i>${list.listTitle}</h2>
                             </div>
                             <div class="mdl-card__actions mdl-card--border">
-                                <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onclick="get">
+                                <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="${list._id}" onclick="getListDetails(this.id)">
                                     View List
                                 </button>
                             </div>
@@ -241,38 +255,55 @@ function getLists() {
 }
 
 function getListDetails(id) {
+    console.log(id);
     const listDetails = lists.filter((list) => list._id === id);
-    document.getElementById("listDetailsContainer").innerHTML = '';
     console.log(listDetails);
+    let listItems = '';
+    listDetails[0].items.forEach((item) => {
+        console.log(item);
+        console.log(typeof item);
+        if (item !== null || item !== undefined)
+            listItems += ` 
+                <tr class='${item.completed ? "is-selected" : "" }'>
+                    <td class='${item.completed ? "mdl-data-table__cell--non-numeric checked-off" : "mdl-data-table__cell--non-numeric"}'>
+                        ${item.name}
+                    </td>
+                </tr>`
+    })
+
 
     document.getElementById("listDetailsContainer").innerHTML +=
-        `<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+        `<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="listTable">
             <thead>
                <tr>
                 <th class="mdl-data-table__cell--non-numeric">
-                    Item Name
+                    ${listDetails[0].listTitle}
                 </th>
                </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
-                </tr>
-                <tr>
-                    <td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
-                </tr>
-                <tr>
-                    <td class="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
-                </tr>
+                ${listItems}
             </tbody>
         </table>`
+    listTable = document.getElementById( 'listTable');
+    listTable.removeAttribute("data-upgraded");
+    componentHandler.upgradeDom();
 }
 
 listForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const listTitle = document.querySelector("#title").value;
-    const name = document.querySelector("#taskName").value;
-
+    const items = [];
+    const listTitle = document.querySelector("#listTitle").value;
+    let todoItems, i;
+    todoItems = document.querySelectorAll(".item");
+    let todoObj = {}
+    for (i = 0; i < todoItems.length; i++) {
+        todoObj = {
+            name: todoItems[i].value,
+            completed: false
+        }
+        items.push(todoObj);
+    }
     const bodyData = {
         listTitle,
         items

@@ -31,7 +31,7 @@ app.get('/api', (req, res) => {
         res.json(recipes);
     })
 })
-app.get('/api', (req, res) => {
+app.get('/api/lists', (req, res) => {
     List.find((err, lists) => {
         if (err)
             console.log(handleError(err));
