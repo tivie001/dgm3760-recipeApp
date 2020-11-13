@@ -85,3 +85,19 @@ app.post('/api/addList' ,(req, res) => {
         })
     })
 })
+
+app.put('/api/:id', (req, res) => {
+    List.findById(req.params.id, (err, list) => {
+        if (err)
+            console.log(handleError(err));
+        list.update({items: req.body[0].items}, (err) => {
+            if (err)
+                console.log(err);
+            List.find((err, list) => {
+                if (err)
+                    console.log(handleError(err));
+                res.json(list);
+            })
+        })
+    })
+})

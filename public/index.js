@@ -236,7 +236,7 @@ function getLists() {
             console.log(myLists);
             myLists.forEach((list) => {
                 lists.push(list);
-                tableRows += `<div class="demo-card-wide mdl-card mdl-shadow--2dp" id="${list._id}">
+                tableRows += `<div class="demo-card-wide mdl-card mdl-shadow--2dp" id="${list._id}" style="margin-top: 2rem">
                             <div class="mdl-card__title list-card">
                                 <h2 class="mdl-card__title-text"><i class="material-icons" style="padding-right: 1rem">shopping_cart</i>${list.listTitle}</h2>
                             </div>
@@ -258,13 +258,30 @@ function getListDetails(id) {
     console.log(id);
     const listDetails = lists.filter((list) => list._id === id);
     console.log(listDetails);
+    document.getElementById("listDetailsContainer").innerHTML = ''
     let listItems = '';
-    listDetails[0].items.forEach((item) => {
+    listDetails[0].items.forEach((item, index) => {
         console.log(item);
         console.log(typeof item);
         if (item !== null || item !== undefined)
+            console.log(index);
             listItems += ` 
                 <tr class='${item.completed ? "is-selected" : "" }'>
+                    <td>
+                        <label 
+                        class='${item.completed ? "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded is-checked" 
+                        : "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded"}'
+                        data-upgraded=",MaterialCheckbox,MaterialRipple">
+                            <input type="checkbox" class="mdl-checkbox__input" id="${listDetails[0]._id}" onclick="updateListItem(this.id, ${index})">
+                            <span class="mdl-checkbox__focus-helper"></span>
+                            <span class="mdl-checkbox__box-outline">
+                                <span class="mdl-checkbox__tick-outline"></span>
+                            </span>
+                            <span class="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center" data-upgraded=",MaterialRipple">
+                                <span class="mdl-ripple is-animating" style="width: 103.823px; height: 103.823px; transform: translate(-50%, -50%) translate(18px, 18px);"></span>
+                            </span>
+                        </label>
+                   </td>
                     <td class='${item.completed ? "mdl-data-table__cell--non-numeric checked-off" : "mdl-data-table__cell--non-numeric"}'>
                         ${item.name}
                     </td>
@@ -273,9 +290,10 @@ function getListDetails(id) {
 
 
     document.getElementById("listDetailsContainer").innerHTML +=
-        `<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="listTable">
+        `<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" id="listTable">
             <thead>
                <tr>
+               <th></th>
                 <th class="mdl-data-table__cell--non-numeric">
                     ${listDetails[0].listTitle}
                 </th>
@@ -285,9 +303,13 @@ function getListDetails(id) {
                 ${listItems}
             </tbody>
         </table>`
-    listTable = document.getElementById( 'listTable');
-    listTable.removeAttribute("data-upgraded");
-    componentHandler.upgradeDom();
+    // listTable = document.getElementById( 'listTable');
+    checkboxLabel = document.querySelectorAll( '.mdl-checkbox');
+    checkboxLabel.forEach(checkbox => {
+        checkbox.removeAttribute("data-upgraded");
+        // componentHandler.upgradeDom();
+    })
+    // listTable.removeAttribute("data-upgraded");
 }
 
 listForm.addEventListener('submit', (e) => {
@@ -296,7 +318,7 @@ listForm.addEventListener('submit', (e) => {
     const listTitle = document.querySelector("#listTitle").value;
     let todoItems, i;
     todoItems = document.querySelectorAll(".item");
-    let todoObj = {}
+    let todoObj = {};
     for (i = 0; i < todoItems.length; i++) {
         todoObj = {
             name: todoItems[i].value,
@@ -325,3 +347,21 @@ listForm.addEventListener('submit', (e) => {
         })
     }
 });
+
+function updateListItem(id, index) {
+    const listItem = lists.filter((list) => list._id === id);
+    console.log(listItem);
+    const indexedItem = listItem[0].items[index];
+    indexedItem.completed = !indexedItem.completed;
+    console.log(listItem);
+
+    axios.put(`/api/${id}`, listItem)
+        .then(function () {
+            getLists();
+            document.getElementById("listDetailsContainer").innerHTML = ''
+            getListDetails(id);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+}
