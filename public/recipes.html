@@ -14,13 +14,12 @@
     <!-- getmdl -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="css/getmdl-select.min.css">
-    <script defer src="js/getmdl-select.min.js"></script>
 
     <link rel="stylesheet" href="app.css">
     <link rel="stylesheet" href="styles.css">
 
   </head>
-  <body onload="getRecipes()">
+  <body onload="getRecipes(); getLists()">
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
@@ -80,7 +79,7 @@
           </div>
         </div>
 
-        <!--==================== ADD RECIPE FORM ====================-->
+        <!--==================== DIALOGS ====================-->
         <dialog class="mdl-dialog add-recipe-dialog">
           <h4 class="mdl-dialog__title" style="color: #ffc439"><i class="material-icons" style="font-size: 38px; padding-right: 1rem">
             menu_book</i>Add New Recipe
@@ -184,12 +183,40 @@
             </form>
           </div>
         </dialog>
-        <!--==================== END OF RECIPE FORM ====================-->
+          <dialog class="mdl-dialog" id="ingredsDialog">
+              <h4 class="mdl-dialog__title" style="color: #ffc439"><i class="material-icons" style="font-size: 38px; padding-right: 1rem">
+                  menu_book</i>Add Ingredients to List
+              </h4>
+              <div class="mdl-dialog__content">
+                  <form id="addIngredsListForm" enctype="multipart/form-data">
+<!--                      <div class="mdl-textfield mdl-js-textfield getmdl-select" id="selectList">-->
+<!--                          <input type="text" value="" class="mdl-textfield__input" id="listName" name="listName" readonly>-->
+<!--                          <input type="hidden" value="" name="listName">-->
+<!--                          <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>-->
+<!--                          <label for="listName" class="mdl-textfield__label">Select A List</label>-->
+<!--                          <ul for="listName" class="mdl-menu mdl-menu&#45;&#45;bottom-left mdl-js-menu" id="listNames"></ul>-->
+<!--                      </div>-->
+                      <label for="selectList">Select A List</label>
+                      <br>
+                      <select id="selectList" name="listNames"></select>
+                  </form>
+                  <div id="ingredsTable" style="margin-top: 1rem"></div>
+              </div>
+              <div class="mdl-dialog__actions">
+                  <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect"
+                  onclick="addIngredientToList()">
+                      Add Ingredients To List
+                  </button>
+                  <button type="button" class="mdl-button close" style="color: red">Cancel</button>
+              </div>
+          </dialog>
+        <!--==================== END OF DIALOGS ====================-->
       </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script defer src="js/getmdl-select.min.js"></script>
     <script src="index.js"></script>
   </body>
 </html>

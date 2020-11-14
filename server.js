@@ -101,3 +101,22 @@ app.put('/api/:id', (req, res) => {
         })
     })
 })
+
+app.put('/api/addIngreds/:id', (req, res) => {
+    // let newItems;
+    List.findById(req.params.id, (err, list) => {
+        if (err)
+            console.log(handleError(err));
+        const newItems = [...list.items, ...req.body]
+        console.log(newItems);
+        list.update({items: newItems}, (err) => {
+            if (err)
+                console.log(err);
+            List.find((err, list) => {
+                if (err)
+                    console.log(handleError(err));
+                res.json(list);
+            })
+        })
+    })
+})

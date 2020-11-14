@@ -1,6 +1,7 @@
 const url = 'http://localhost:3000'
 let recipes = [];
 let lists = [];
+let selectedRecipeDetails = [];
 const recipeForm = document.querySelector('#addRecipeForm');
 const listForm = document.querySelector('#addListForm');
 
@@ -42,6 +43,7 @@ function getRecipes() {
 
 function getRecipeDetails(id) {
     const recipeDetails = recipes.filter((recipe) => recipe._id === id);
+    selectedRecipeDetails.push(recipeDetails[0]);
     document.getElementById("cardContainer").innerHTML = '';
     console.log(recipeDetails);
     let ingredientStr = '';
@@ -90,14 +92,27 @@ function getRecipeDetails(id) {
                     </div>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"></a>
+                  <button id="showIngredsDialog" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" 
+                  onclick="showIngredientsDialog(selectedRecipeDetails)">
+                    Add Ingredients To List
+                  </button>
                 </div>
                 <div class="mdl-card__menu">
                   <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                     <i class="material-icons">share</i>
                   </button>
                 </div>
+               
               </div>`
+
+    var ingredsDialog = document.getElementById('ingredsDialog');
+    var showIngredListDialogBtn = document.querySelector('#showIngredsDialog');
+    if (! ingredsDialog.showModal) {
+        dialogPolyfill.registerDialog(ingredsDialog);
+    }
+    showIngredListDialogBtn.addEventListener('click', function() {
+        ingredsDialog.showModal();
+    });
 }
 // document.getElementById("file").addEventListener("change", readFile);
 
@@ -175,9 +190,6 @@ if (recipeForm){
 
     });
 }
-
-
-
 function addIngredient() {
     var str = '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">\n' +
         '                  <input class="mdl-textfield__input ingredient" type="text" id="ingredient">\n' +
@@ -205,10 +217,10 @@ function addTodoItem() {
         '                  <input class="mdl-textfield__input item" type="text" id="item" name="item">\n' +
         '                  <label class="mdl-textfield__label" for="item">New Item</label>\n' +
         '                </div>'
-    directionsContainer = document.getElementById( 'items');
-    directionsContainer.insertAdjacentHTML( 'beforeend', str );
-    directionsContainer.classList.remove("is-upgraded");
-    directionsContainer.removeAttribute("data-upgraded");
+    todoItem = document.getElementById( 'items');
+    todoItem.insertAdjacentHTML( 'beforeend', str );
+    todoItem.classList.remove("is-upgraded");
+    todoItem.removeAttribute("data-upgraded");
     componentHandler.upgradeDom();
 }
 
@@ -220,13 +232,10 @@ if (! dialog.showModal) {
 showDialogButton.addEventListener('click', function() {
     dialog.showModal();
 });
+
 dialog.querySelector('.close').addEventListener('click', function() {
     dialog.close();
 });
-
-
-
-
 
 function getLists() {
     axios.get('/api/lists')
@@ -264,7 +273,6 @@ function getListDetails(id) {
         console.log(item);
         console.log(typeof item);
         if (item !== null || item !== undefined)
-            console.log(index);
             listItems += ` 
                 <tr class='${item.completed ? "is-selected" : "" }'>
                     <td>
@@ -287,8 +295,6 @@ function getListDetails(id) {
                     </td>
                 </tr>`
     })
-
-
     document.getElementById("listDetailsContainer").innerHTML +=
         `<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" id="listTable">
             <thead>
@@ -303,13 +309,11 @@ function getListDetails(id) {
                 ${listItems}
             </tbody>
         </table>`
-    // listTable = document.getElementById( 'listTable');
     checkboxLabel = document.querySelectorAll( '.mdl-checkbox');
     checkboxLabel.forEach(checkbox => {
         checkbox.removeAttribute("data-upgraded");
         // componentHandler.upgradeDom();
     })
-    // listTable.removeAttribute("data-upgraded");
 }
 
 listForm.addEventListener('submit', (e) => {
@@ -350,10 +354,8 @@ listForm.addEventListener('submit', (e) => {
 
 function updateListItem(id, index) {
     const listItem = lists.filter((list) => list._id === id);
-    console.log(listItem);
     const indexedItem = listItem[0].items[index];
     indexedItem.completed = !indexedItem.completed;
-    console.log(listItem);
 
     axios.put(`/api/${id}`, listItem)
         .then(function () {
@@ -365,3 +367,93 @@ function updateListItem(id, index) {
             console.log(error);
         })
 }
+
+function showIngredientsDialog(details) {
+    let listItems = '';
+    lists.forEach((list, index) => {
+        // listItems += `<li class="mdl-menu__item" data-val="${index}">${list.listTitle}</li>`
+        listItems += `  <option value="${list._id}">${list.listTitle}</option>`
+    })
+    console.log(listItems);
+    document.getElementById("ingredsTable").innerHTML =
+            `<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="listTable">
+             <thead>
+               <tr>
+                <th class="mdl-data-table__cell--non-numeric">
+                </th>
+               </tr>
+             </thead>
+             <tbody id="selectIngreds">
+                ${formatIngredsTable(details)}
+             </tbody>
+        </table>`
+    listedItems = document.getElementById( 'selectList');
+    listedItems.insertAdjacentHTML( 'beforeend', listItems);
+    componentHandler.upgradeDom();
+}
+
+function formatIngredsTable(details) {
+    console.log(details);
+    let tableRows = '';
+    if (details) {
+        details[0].ingredients.forEach((item, index) => {
+            if (item !== null || item !== undefined)
+            tableRows += ` 
+                <tr>
+                    <td>
+                        ${item}
+                    </td>
+                </tr>`
+        })
+        checkboxLabel = document.querySelectorAll( '.mdl-checkbox');
+        checkboxLabel.forEach(checkbox => {
+            checkbox.removeAttribute("data-upgraded");
+            componentHandler.upgradeDom();
+        })
+        return tableRows;
+    }
+}
+function addIngredientToList() {
+    let addedIngreds = [];
+    let todoObj = {};
+    const id = document.getElementById("selectList").value;
+    const ingredDiv = document.getElementById("selectIngreds");
+    const selectedIngreds = ingredDiv.querySelectorAll("tr.is-selected");
+    selectedIngreds.forEach((ingred) => {
+        todoObj = {
+            name: ingred.innerText,
+            completed: false
+        }
+        addedIngreds.push(todoObj);
+    })
+    console.log(addedIngreds);
+    console.log(id);
+
+    axios.put(`/api/addIngreds/${id}`, addedIngreds)
+        .then(function () {
+            getLists();
+            document.getElementById("listDetailsContainer").innerHTML = ''
+            getListDetails(id);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+
+}
+
+// <td>
+//     <label
+//         className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded"
+//         data-upgraded=",MaterialCheckbox,MaterialRipple">
+//         <input type="checkbox" className="mdl-checkbox__input" id="${index}">
+//             <span className="mdl-checkbox__focus-helper"></span>
+//             <span className="mdl-checkbox__box-outline">
+//                                 <span className="mdl-checkbox__tick-outline"></span>
+//                             </span>
+//             <span className="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center"
+//                   data-upgraded=",MaterialRipple">
+//                                 <span className="mdl-ripple is-animating"
+//                                       style="width: 103.823px; height: 103.823px; transform: translate(-50%, -50%) translate(18px, 18px);"></span>
+//                             </span>
+//     </label>
+// </td>

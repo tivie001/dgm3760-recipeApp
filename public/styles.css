@@ -46,6 +46,9 @@
 #listDetailsContainer {
     margin-top: 2.5rem;
 }
+#ingredsTable {
+    z-index: 0;
+}
 .subtitle-name {
     color: #868686;
 }
@@ -96,4 +99,13 @@
     display: flex;
     justify-content: space-around;
     flex-direction: row;
+}
+#ingredsDialog {
+    width: 450px;
+}
+#selectList {
+    z-index: 2;
+}
+#ingredsTable {
+    z-index: 1;
 }
