@@ -8,6 +8,10 @@
 #myListsCard > .mdl-card__title{
     background: url('images/list.png') center / cover;
 }
+#listCards {
+    height: 850px;
+    overflow-y: scroll;
+}
 .card-buttons {
     display: flex;
     justify-content: space-between;
@@ -29,14 +33,35 @@
     display: block;
     background: rgba(0, 0, 0, 0.3);
 }
-.list-card {
+.shopping-list-card {
     background: #37474F;
+}
+.general-list-card {
+    background: #ffc439;
 }
 .list-card-header {
     display: flex;
     justify-content: center;
     flex-direction: row;
     align-items: center;
+}
+.card-image {
+    height: 200px;
+}
+.card-title {
+    font-family: Raleway;
+    padding-left: 1.2rem;
+}
+.card-title h2 {
+    margin-bottom: 0;
+}
+.card-title h4 {
+    margin-top: 0;
+}
+.card-icons {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
 }
 
 /*======== TABLE STYLES ========*/
@@ -69,26 +94,6 @@
 }
 .checked-off {
     text-decoration: line-through;
-}
-
-/*======== CARD STYLES ========*/
-.card-image {
-    height: 200px;
-}
-.card-title {
-    font-family: Raleway;
-    padding-left: 1.2rem;
-}
-.card-title h2 {
-    margin-bottom: 0;
-}
-.card-title h4 {
-    margin-top: 0;
-}
-.card-icons {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
 }
 
 /*======== DIALOG STYLES ========*/

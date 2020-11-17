@@ -268,8 +268,11 @@ function getLists() {
             myLists.forEach((list) => {
                 lists.push(list);
                 tableRows += `<div class="demo-card-wide mdl-card mdl-shadow--2dp" id="${list._id}" style="margin-top: 2rem">
-                            <div class="mdl-card__title list-card">
-                                <h2 class="mdl-card__title-text"><i class="material-icons" style="padding-right: 1rem">shopping_cart</i>${list.listTitle}</h2>
+                            <div class='${list.category === "Shopping" ? "mdl-card__title shopping-list-card" : "mdl-card__title general-list-card"}'>
+                                <h2 class="mdl-card__title-text">
+                                    <i class="material-icons" style="padding-right: 1rem">${list.category === 'Shopping' ? 'shopping_cart' : 'list'}</i>
+                                    ${list.listTitle}
+                                </h2>
                             </div>
                             <div class="mdl-card__actions mdl-card--border">
                                 <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="${list._id}" onclick="getListDetails(this.id)">
@@ -287,7 +290,8 @@ function getLists() {
 
 function getListDetails(id) {
     const listDetails = lists.filter((list) => list._id === id);
-    selectedListDetails.push(listDetails[0]);
+    selectedListDetails = listDetails[0];
+    console.log(selectedListDetails);
     document.getElementById("listDetailsContainer").innerHTML = '';
     let listItems = '';
     listDetails[0].items.forEach((item, index) => {
@@ -344,7 +348,7 @@ if (listForm) {
         e.preventDefault();
         const items = [];
         const listTitle = document.querySelector("#listTitle").value;
-        const category = document.querySelector("#listTitle").value;
+        const category = document.querySelector("#category").value;
         let todoItems, i;
         todoItems = document.querySelectorAll(".item");
         let todoObj = {};
@@ -396,8 +400,9 @@ function updateListItem(id, index) {
 }
 
 function deleteTodoItem(index) {
-    const id = selectedListDetails[0]._id;
-    selectedListDetails[0].items.splice(index, 1);
+    console.log(selectedListDetails);
+    const id = selectedListDetails._id;
+    selectedListDetails.items.splice(index, 1);
     axios.put(`/api/updateList/${id}`, selectedListDetails)
         .then(function () {
             getLists();
@@ -592,9 +597,8 @@ function updateRecipe(){
     };
 
     axios.put(`/api/${id}`, bodyData)
-        .then(function (res) {
-            console.log(res);
-            // getRecipeDetails()
+        .then(function () {
+            getRecipeDetails(id)
             closeModal();
         })
         .catch(function (error) {

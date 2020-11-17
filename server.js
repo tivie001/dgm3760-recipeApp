@@ -73,7 +73,8 @@ app.post('/api/addList' ,(req, res) => {
 
     List.create({
         listTitle: req.body.listTitle,
-        items: req.body.items
+        items: req.body.items,
+        category: req.body.category
 
     }, (err) => {
         if (err)
@@ -90,8 +91,7 @@ app.put('/api/updateList/:id', (req, res) => {
     List.findById(req.params.id, (err, list) => {
         if (err)
             console.log(handleError(err));
-        console.log(req.body[0].items)
-        list.update({items: req.body[0].items}, (err) => {
+        list.update({items: req.body.items}, (err) => {
             if (err)
                 console.log(err);
             List.find((err, list) => {
@@ -103,12 +103,9 @@ app.put('/api/updateList/:id', (req, res) => {
     })
 })
 app.put('/api/:id', (req, res) => {
-    console.log(req.params.id);
-
     Recipe.findById(req.params.id, (err, recipe) => {
         if (err)
             console.log(handleError(err));
-        console.log(recipe);
         recipe.update(req.body, (err) => {
             if (err)
                 console.log(err);
