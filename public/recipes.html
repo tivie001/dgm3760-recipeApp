@@ -62,7 +62,6 @@
       </div>
       <main class="mdl-layout__content mdl-color--grey-100">
         <div class="image-container">
-<!--          <img class="header-image" src="images/header-image.jpg" alt="Fruit bowl on a table"/>-->
           <div class="after"></div>
         </div>
         <div class="main-container">
@@ -175,7 +174,7 @@
                 <i class="material-icons">add</i>
               </button>
               <div class="mdl-dialog__actions">
-                <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect">
+                <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect close">
                   Add New Recipe
                 </button>
                 <button type="button" class="mdl-button close" style="color: red">Cancel</button>
@@ -189,13 +188,13 @@
               </h4>
               <div class="mdl-dialog__content">
                   <form id="addIngredsListForm" enctype="multipart/form-data">
-<!--                      <div class="mdl-textfield mdl-js-textfield getmdl-select" id="selectList">-->
-<!--                          <input type="text" value="" class="mdl-textfield__input" id="listName" name="listName" readonly>-->
-<!--                          <input type="hidden" value="" name="listName">-->
-<!--                          <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>-->
-<!--                          <label for="listName" class="mdl-textfield__label">Select A List</label>-->
-<!--                          <ul for="listName" class="mdl-menu mdl-menu&#45;&#45;bottom-left mdl-js-menu" id="listNames"></ul>-->
-<!--                      </div>-->
+                      <!--                      <div class="mdl-textfield mdl-js-textfield getmdl-select" id="selectList">-->
+                      <!--                          <input type="text" value="" class="mdl-textfield__input" id="listName" name="listName" readonly>-->
+                      <!--                          <input type="hidden" value="" name="listName">-->
+                      <!--                          <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>-->
+                      <!--                          <label for="listName" class="mdl-textfield__label">Select A List</label>-->
+                      <!--                          <ul for="listName" class="mdl-menu mdl-menu&#45;&#45;bottom-left mdl-js-menu" id="listNames"></ul>-->
+                      <!--                      </div>-->
                       <label for="selectList">Select A List</label>
                       <br>
                       <select id="selectList" name="listNames"></select>
@@ -203,11 +202,95 @@
                   <div id="ingredsTable" style="margin-top: 1rem"></div>
               </div>
               <div class="mdl-dialog__actions">
-                  <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect"
-                  onclick="addIngredientToList()">
+                  <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect close"
+                          onclick="addIngredientToList()">
                       Add Ingredients To List
                   </button>
                   <button type="button" class="mdl-button close" style="color: red">Cancel</button>
+              </div>
+          </dialog>
+          <dialog class="mdl-dialog add-recipe-dialog" id="editDialog">
+              <h4 class="mdl-dialog__title" style="color: #ffc439"><i class="material-icons" style="font-size: 38px; padding-right: 1rem">
+                  menu_book</i>Edit Recipe
+              </h4>
+              <div class="mdl-dialog__content">
+                  <form id="editRecipeForm" enctype="multipart/form-data">
+                      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs extrawide-textarea">
+                          <input class="mdl-textfield__input" type="text" name="title" id="editTitle">
+                          <label class="mdl-textfield__label" for="title">Recipe Title</label>
+                      </div>
+                      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs extrawide-textarea">
+                          <input class="mdl-textfield__input" type="text" name="subTitle" id="editSubTitle">
+                          <label class="mdl-textfield__label" for="subTitle">Recipe Subtitle</label>
+                      </div>
+                      <div class="single-line-textboxes">
+                          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs">
+                              <input class="mdl-textfield__input" type="text" name="totalHours" id="editTotalHours">
+                              <label class="mdl-textfield__label" for="totalHours">Total Hours</label>
+                          </div>
+                          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs">
+                              <input class="mdl-textfield__input" type="text" name="totalMins" id="editTotalMin">
+                              <label class="mdl-textfield__label" for="totalMins">Total Minutes</label>
+                          </div>
+                      </div>
+                      <div>
+                          <label for="selectList">Select A Rating</label>
+                          <br>
+                          <select id="editRating">
+                              <option value="1 Star">1 Star</option>
+                              <option value="2 Stars">2 Stars</option>
+                              <option value="3 Stars">3 Star</option>
+                              <option value="4 Stars">4 Stars</option>
+                              <option value="5 Stars">5 Stars</option>
+                          </select>
+                      </div>
+                      <br>
+                      <div>
+                          <label for="selectList">Select A Difficulty</label>
+                          <br>
+                          <select id="editDifficulty">
+                              <option value="Easy">Easy</option>
+                              <option value="Moderate">Moderate</option>
+                              <option value="Hard">Hard</option>
+                          </select>
+                      </div>
+                      <h6>Preparation Details</h6>
+                      <hr>
+                      <div class="single-line-textboxes">
+                          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs">
+                              <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="editPrepHours" id="editPrepHours">
+                              <label class="mdl-textfield__label" for="editPrepHours">Prep Hour(s)</label>
+                              <span class="mdl-textfield__error">Input is not a number!</span>
+                          </div>
+                          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs">
+                              <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" name="editPrepMins" id="editPrepMins">
+                              <label class="mdl-textfield__label" for="editPrepMins">Prep Minutes</label>
+                              <span class="mdl-textfield__error">Input is not a number!</span>
+                          </div>
+                      </div>
+                      <div class="mdl-textfield mdl-js-textfield editable-inputs">
+                          <textarea class="mdl-textfield__input" type="text" rows= "3" name="editPrepDetails" id="editPrepDetails"></textarea>
+                          <label class="mdl-textfield__label" for="editPrepDetails">Preparation Summary</label>
+                      </div>
+                      <h6>Ingredients</h6>
+                      <hr>
+                      <div id="editIngredients"></div>
+                      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" type="button" onclick="editAddIngredients()">
+                          <i class="material-icons">add</i>
+                      </button>
+                      <h6>Directions</h6>
+                      <hr>
+                      <div id="editDirections"></div>
+                      <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect" type="button" onclick="editAddDirections()">
+                          <i class="material-icons">add</i>
+                      </button>
+                      <div class="mdl-dialog__actions">
+                          <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect close" onclick="updateRecipe()">
+                              Save Changes
+                          </button>
+                          <button type="button" class="mdl-button close" style="color: red">Cancel</button>
+                      </div>
+                  </form>
               </div>
           </dialog>
         <!--==================== END OF DIALOGS ====================-->

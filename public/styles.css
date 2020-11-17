@@ -85,6 +85,11 @@
 .card-title h4 {
     margin-top: 0;
 }
+.card-icons {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
 
 /*======== DIALOG STYLES ========*/
 .add-recipe-dialog {
@@ -101,11 +106,17 @@
     flex-direction: row;
 }
 #ingredsDialog {
-    width: 450px;
+    width: 500px;
 }
 #selectList {
     z-index: 2;
 }
 #ingredsTable {
     z-index: 1;
+}
+.trash-icon:hover {
+    color: red;
+}
+.hide-element {
+    display: none;
 }

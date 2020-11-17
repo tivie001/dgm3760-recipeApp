@@ -50,17 +50,16 @@ function getRecipeDetails(id) {
     let directionStr = '';
 
     recipeDetails[0].ingredients.forEach((ingredient) => {
-        if (ingredient !== null || ingredient !== undefined)
+        if (ingredient)
             ingredientStr += `<li style="padding-top: 7px">${ingredient}</li>`
     })
     recipeDetails[0].directions.forEach((direction, index) => {
-        if (direction !== null || direction !== undefined)
+        if (direction)
             directionStr += `<h6>${index + 1}. ${direction}</h6>`
     })
 
     document.getElementById("cardContainer").innerHTML +=
             `<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-
                 <img class="card-image" src="images/header-image.jpg"/>
                 <div class="card-title">
                   <h2>${recipeDetails[0].title}</h2>
@@ -98,11 +97,12 @@ function getRecipeDetails(id) {
                   </button>
                 </div>
                 <div class="mdl-card__menu">
-                  <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                    <i class="material-icons">share</i>
-                  </button>
+                  <div class="card-icons">
+                    <button id="showEditDialog" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" onclick="toggleEditRecipe()">
+                        <i class="material-icons">create</i>
+                    </button>
+                  </div>
                 </div>
-               
               </div>`
 
     var ingredsDialog = document.getElementById('ingredsDialog');
@@ -112,6 +112,23 @@ function getRecipeDetails(id) {
     }
     showIngredListDialogBtn.addEventListener('click', function() {
         ingredsDialog.showModal();
+    });
+    ingredsDialog.querySelector('.close').addEventListener('click', function() {
+        ingredsDialog.close();
+    });
+
+    let editDialog = document.getElementById('editDialog');
+    let showEditDialogBtn = document.querySelector('#showEditDialog');
+    console.log(editDialog);
+    console.log(showEditDialogBtn);
+    if (! editDialog.showModal) {
+        dialogPolyfill.registerDialog(editDialog);
+    }
+    showEditDialogBtn.addEventListener('click', function() {
+        editDialog.showModal();
+    });
+    editDialog.querySelector('.close').addEventListener('click', function() {
+        editDialog.close();
     });
 }
 // document.getElementById("file").addEventListener("change", readFile);
@@ -232,7 +249,6 @@ if (! dialog.showModal) {
 showDialogButton.addEventListener('click', function() {
     dialog.showModal();
 });
-
 dialog.querySelector('.close').addEventListener('click', function() {
     dialog.close();
 });
@@ -315,49 +331,50 @@ function getListDetails(id) {
         // componentHandler.upgradeDom();
     })
 }
-
-listForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const items = [];
-    const listTitle = document.querySelector("#listTitle").value;
-    let todoItems, i;
-    todoItems = document.querySelectorAll(".item");
-    let todoObj = {};
-    for (i = 0; i < todoItems.length; i++) {
-        todoObj = {
-            name: todoItems[i].value,
-            completed: false
+if (listForm) {
+    listForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const items = [];
+        const listTitle = document.querySelector("#listTitle").value;
+        let todoItems, i;
+        todoItems = document.querySelectorAll(".item");
+        let todoObj = {};
+        for (i = 0; i < todoItems.length; i++) {
+            todoObj = {
+                name: todoItems[i].value,
+                completed: false
+            }
+            items.push(todoObj);
         }
-        items.push(todoObj);
-    }
-    const bodyData = {
-        listTitle,
-        items
-    };
-    if (listTitle) {
-        async function addRecipe() {
-            const response = await fetch(`${url}/api/addList`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(bodyData)
-            });
-            const lists = await response.json();
-            return lists;
+        const bodyData = {
+            listTitle,
+            items
+        };
+        if (listTitle) {
+            async function addRecipe() {
+                const response = await fetch(`${url}/api/addList`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bodyData)
+                });
+                const lists = await response.json();
+                return lists;
+            }
+            addRecipe().then((lists) => {
+                document.getElementById("listCards").innerHTML = getLists(lists);
+            })
         }
-        addRecipe().then((lists) => {
-            document.getElementById("listCards").innerHTML = getLists(lists);
-        })
-    }
-});
+    });
+}
 
 function updateListItem(id, index) {
     const listItem = lists.filter((list) => list._id === id);
     const indexedItem = listItem[0].items[index];
     indexedItem.completed = !indexedItem.completed;
 
-    axios.put(`/api/${id}`, listItem)
+    axios.put(`/api/updateList/${id}`, listItem)
         .then(function () {
             getLists();
             document.getElementById("listDetailsContainer").innerHTML = ''
@@ -439,6 +456,125 @@ function addIngredientToList() {
             console.log(error);
         })
 
+}
+
+function toggleEditRecipe() {
+    const recipeDetails = selectedRecipeDetails[0];
+    console.log(recipeDetails);
+    document.querySelector( '#editTitle').value = recipeDetails.title;
+    document.querySelector( '#editSubTitle').value = recipeDetails.subTitle;
+    document.querySelector( '#editTotalHours').value = recipeDetails.totalHours;
+    document.querySelector( '#editTotalMin').value = recipeDetails.totalMins;
+    document.querySelector( '#editRating').value = recipeDetails.rating;
+    document.querySelector( '#editDifficulty').value = recipeDetails.difficulty;
+    document.querySelector( '#editPrepHours').value = recipeDetails.prepHours;
+    document.querySelector( '#editPrepMins').value = recipeDetails.prepMins;
+    document.querySelector( '#editPrepDetails').value = recipeDetails.prepDetails;
+
+    ingredientsContainer = document.getElementById( 'editIngredients');
+    recipeDetails.ingredients.forEach((ingred, index) => {
+        var str = `<section id="${index}"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs">
+                             <input class="mdl-textfield__input edit-ingredient" value="${ingred}" id="${index}" type="text" id="editIngredient">
+                             <label class="mdl-textfield__label" for="editIngredient">New Ingredient</label>
+                         </div> 
+                         <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="removeIndex(this.id)">
+                            <i class="material-icons">delete</i>
+                         </button></section>`
+        ingredientsContainer.insertAdjacentHTML( 'beforeend', str );
+    })
+    directionsContainer = document.getElementById( 'editDirections');
+    recipeDetails.directions.forEach((direct, index) => {
+        var str = `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs">
+                             <input class="mdl-textfield__input edit-direction" value="${direct}" id="${index}" type="text" id="editDirection">
+                             <label class="mdl-textfield__label" for="editDirection">New Step</label>
+                         </div>
+                         <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" onclick="removeIndex()">
+                            <i class="material-icons">delete</i>
+                         </button>
+                        `
+        directionsContainer.insertAdjacentHTML( 'beforeend', str );
+    })
+
+    ingredientsContainer = document.querySelectorAll( '.editable-inputs');
+    ingredientsContainer.forEach(input => {
+        input.removeAttribute("data-upgraded");
+        componentHandler.upgradeDom();
+    })
+}
+function removeIndex(index) {
+    ingredientsContainer = document.getElementById( 'editIngredients');
+    const ingredientDiv = ingredientsContainer.getElementsByTagName("section")[index];
+    const input = ingredientDiv.getElementsByClassName('edit-ingredient');
+    selectedRecipeDetails[0].ingredients.splice(index, 1);
+    ingredientDiv.classList.add('hide-element');
+    input[0].classList.remove('edit-ingredient');
+}
+function editAddIngredients() {
+    const index = (selectedRecipeDetails[0].ingredients.length);
+    var str = `<section id="${index}"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input edit-ingredient" type="text" id="editIngredient">
+                    <label class="mdl-textfield__label" for="editIngredient">New Ingredient</label>
+               </div>
+              <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="removeIndex(this.id)">                       
+                <i class="material-icons">delete</i>
+              </button></section>`
+    ingredientsContainer = document.getElementById( 'editIngredients');
+    ingredientsContainer.insertAdjacentHTML( 'beforeend', str );
+    ingredientsContainer.classList.remove("is-upgraded");
+    ingredientsContainer.removeAttribute("data-upgraded");
+    componentHandler.upgradeDom();
+}
+function editAddDirections() {
+    var str = '<section><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">\n' +
+        '                  <input class="mdl-textfield__input edit-direction" type="text" id="editDirection">\n' +
+        '                  <label class="mdl-textfield__label" for="editDirection">New Step</label>\n' +
+        '                </div> ' +
+        '                       <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" onclick="removeIndex()">\n                                ' +
+        '                           <i class="material-icons">delete</i>\n                             ' +
+        '                       </button></section>'
+    directionsContainer = document.getElementById( 'editDirections');
+    directionsContainer.insertAdjacentHTML( 'beforeend', str );
+    directionsContainer.classList.remove("is-upgraded");
+    directionsContainer.removeAttribute("data-upgraded");
+    componentHandler.upgradeDom();
+}
+function updateRecipe(){
+    const ingredients = [];
+    const directions = [];
+    const id = selectedRecipeDetails[0]._id;
+    const ingredientsContainer = document.querySelectorAll('.edit-ingredient');
+    const directionsContainer = document.querySelectorAll('.edit-direction');
+    ingredientsContainer.forEach((ingredient) => {
+        if(ingredient)
+            ingredients.push(ingredient.value);
+    })
+    directionsContainer.forEach((direction, index) => {
+        if(direction)
+            directions.push(direction.value);
+    })
+
+    const bodyData = {
+        title: document.querySelector( '#editTitle').value,
+        subTitle: document.querySelector( '#editSubTitle').value,
+        totalHours: document.querySelector( '#editTotalHours').value,
+        totalMins: document.querySelector( '#editTotalMin').value,
+        rating: document.querySelector( '#editRating').value,
+        difficulty: document.querySelector( '#editDifficulty').value,
+        prepHours: document.querySelector( '#editPrepHours').value,
+        prepMins: document.querySelector( '#editPrepMins').value,
+        prepDetails: document.querySelector( '#editPrepDetails').value,
+        ingredients: ingredients,
+        directions: directions
+    };
+
+    axios.put(`/api/${id}`, bodyData)
+        .then(function (res) {
+            console.log(res);
+            // getRecipeDetails()
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }
 
 // <td>

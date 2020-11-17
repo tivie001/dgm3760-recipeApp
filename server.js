@@ -5,7 +5,7 @@ const Recipe = require('./models/recipeModel');
 const List = require('./models/listModel');
 require('dotenv/config');
 const multer = require('multer');
-const upload = multer({dest: 'uploads/'})
+const upload = multer({dest: 'uploads/'});
 
 const app = express();
 const PORT = 3000;
@@ -23,7 +23,7 @@ app.listen(process.env.PORT || 3000, () =>{
 
 
 // ============== RECIPE APP CRUD METHODS =============
-// ============== (GET) ALL RECIPES =============
+// ============== (GET) GET DATA =============
 app.get('/api', (req, res) => {
     Recipe.find((err, recipes) => {
         if (err)
@@ -85,8 +85,8 @@ app.post('/api/addList' ,(req, res) => {
         })
     })
 })
-
-app.put('/api/:id', (req, res) => {
+// ============== (PUT) UPDATE FUNCTIONS =============
+app.put('/api/updateList/:id', (req, res) => {
     List.findById(req.params.id, (err, list) => {
         if (err)
             console.log(handleError(err));
@@ -101,9 +101,27 @@ app.put('/api/:id', (req, res) => {
         })
     })
 })
+app.put('/api/:id', (req, res) => {
+    console.log(req.params.id);
+
+    Recipe.findById(req.params.id, (err, recipe) => {
+
+        if (err)
+            console.log(handleError(err));
+        console.log(recipe);
+        recipe.update(req.body, (err) => {
+            if (err)
+                console.log(err);
+            Recipe.find((err, recipe) => {
+                if (err)
+                    console.log(handleError(err));
+                res.json(recipe);
+            })
+        })
+    })
+})
 
 app.put('/api/addIngreds/:id', (req, res) => {
-    // let newItems;
     List.findById(req.params.id, (err, list) => {
         if (err)
             console.log(handleError(err));
