@@ -2,6 +2,7 @@ const url = 'http://localhost:3000'
 let recipes = [];
 let lists = [];
 let selectedRecipeDetails = [];
+let selectedListDetails = [];
 const recipeForm = document.querySelector('#addRecipeForm');
 const listForm = document.querySelector('#addListForm');
 
@@ -45,7 +46,6 @@ function getRecipeDetails(id) {
     const recipeDetails = recipes.filter((recipe) => recipe._id === id);
     selectedRecipeDetails.push(recipeDetails[0]);
     document.getElementById("cardContainer").innerHTML = '';
-    console.log(recipeDetails);
     let ingredientStr = '';
     let directionStr = '';
 
@@ -130,6 +130,12 @@ function getRecipeDetails(id) {
     editDialog.querySelector('.close').addEventListener('click', function() {
         editDialog.close();
     });
+}
+function closeModal() {
+    const ingredsDialog = document.getElementById('ingredsDialog');
+    const editDialog = document.getElementById('editDialog');
+    ingredsDialog.close();
+    editDialog.close();
 }
 // document.getElementById("file").addEventListener("change", readFile);
 
@@ -280,15 +286,12 @@ function getLists() {
 }
 
 function getListDetails(id) {
-    console.log(id);
     const listDetails = lists.filter((list) => list._id === id);
-    console.log(listDetails);
-    document.getElementById("listDetailsContainer").innerHTML = ''
+    selectedListDetails.push(listDetails[0]);
+    document.getElementById("listDetailsContainer").innerHTML = '';
     let listItems = '';
     listDetails[0].items.forEach((item, index) => {
-        console.log(item);
-        console.log(typeof item);
-        if (item !== null || item !== undefined)
+        if (item)
             listItems += ` 
                 <tr class='${item.completed ? "is-selected" : "" }'>
                     <td>
@@ -305,9 +308,14 @@ function getListDetails(id) {
                                 <span class="mdl-ripple is-animating" style="width: 103.823px; height: 103.823px; transform: translate(-50%, -50%) translate(18px, 18px);"></span>
                             </span>
                         </label>
-                   </td>
+                    </td>
                     <td class='${item.completed ? "mdl-data-table__cell--non-numeric checked-off" : "mdl-data-table__cell--non-numeric"}'>
                         ${item.name}
+                    </td>
+                    <td>
+                        <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="deleteTodoItem(this.id)">                       
+                            <i class="material-icons">delete</i>
+                        </button>
                     </td>
                 </tr>`
     })
@@ -336,6 +344,7 @@ if (listForm) {
         e.preventDefault();
         const items = [];
         const listTitle = document.querySelector("#listTitle").value;
+        const category = document.querySelector("#listTitle").value;
         let todoItems, i;
         todoItems = document.querySelectorAll(".item");
         let todoObj = {};
@@ -348,6 +357,7 @@ if (listForm) {
         }
         const bodyData = {
             listTitle,
+            category,
             items
         };
         if (listTitle) {
@@ -385,19 +395,32 @@ function updateListItem(id, index) {
         })
 }
 
+function deleteTodoItem(index) {
+    const id = selectedListDetails[0]._id;
+    selectedListDetails[0].items.splice(index, 1);
+    axios.put(`/api/updateList/${id}`, selectedListDetails)
+        .then(function () {
+            getLists();
+            document.getElementById("listDetailsContainer").innerHTML = ''
+            getListDetails(id);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+}
+
 function showIngredientsDialog(details) {
     let listItems = '';
     lists.forEach((list, index) => {
         // listItems += `<li class="mdl-menu__item" data-val="${index}">${list.listTitle}</li>`
-        listItems += `  <option value="${list._id}">${list.listTitle}</option>`
+        listItems += `<option value="${list._id}">${list.listTitle}</option>`
     })
     console.log(listItems);
     document.getElementById("ingredsTable").innerHTML =
             `<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="listTable">
              <thead>
                <tr>
-                <th class="mdl-data-table__cell--non-numeric">
-                </th>
+                <th class="mdl-data-table__cell--non-numeric"></th>
                </tr>
              </thead>
              <tbody id="selectIngreds">
@@ -414,13 +437,13 @@ function formatIngredsTable(details) {
     let tableRows = '';
     if (details) {
         details[0].ingredients.forEach((item, index) => {
-            if (item !== null || item !== undefined)
-            tableRows += ` 
-                <tr>
-                    <td>
-                        ${item}
-                    </td>
-                </tr>`
+            if (item)
+                tableRows += ` 
+                    <tr>
+                        <td>
+                            ${item}
+                        </td>
+                    </tr>`
         })
         checkboxLabel = document.querySelectorAll( '.mdl-checkbox');
         checkboxLabel.forEach(checkbox => {
@@ -451,6 +474,7 @@ function addIngredientToList() {
             getLists();
             document.getElementById("listDetailsContainer").innerHTML = ''
             getListDetails(id);
+            closeModal();
         })
         .catch(function (error) {
             console.log(error);
@@ -571,6 +595,7 @@ function updateRecipe(){
         .then(function (res) {
             console.log(res);
             // getRecipeDetails()
+            closeModal();
         })
         .catch(function (error) {
             console.log(error);

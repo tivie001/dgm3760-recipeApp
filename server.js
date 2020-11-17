@@ -90,6 +90,7 @@ app.put('/api/updateList/:id', (req, res) => {
     List.findById(req.params.id, (err, list) => {
         if (err)
             console.log(handleError(err));
+        console.log(req.body[0].items)
         list.update({items: req.body[0].items}, (err) => {
             if (err)
                 console.log(err);
@@ -105,7 +106,6 @@ app.put('/api/:id', (req, res) => {
     console.log(req.params.id);
 
     Recipe.findById(req.params.id, (err, recipe) => {
-
         if (err)
             console.log(handleError(err));
         console.log(recipe);
@@ -122,10 +122,15 @@ app.put('/api/:id', (req, res) => {
 })
 
 app.put('/api/addIngreds/:id', (req, res) => {
+    let newItems;
     List.findById(req.params.id, (err, list) => {
         if (err)
             console.log(handleError(err));
-        const newItems = [...list.items, ...req.body]
+        if (list.items){
+            newItems = [...list.items, ...req.body]
+        } else {
+            newItems = req.body;
+        }
         console.log(newItems);
         list.update({items: newItems}, (err) => {
             if (err)
@@ -135,6 +140,19 @@ app.put('/api/addIngreds/:id', (req, res) => {
                     console.log(handleError(err));
                 res.json(list);
             })
+        })
+    })
+})
+app.delete('/api/:id', (req, res) => {
+    List.remove({
+        _id: req.params.id
+    }, (err) => {
+        if (err)
+            console.log(handleError(err));
+        Todo.find((err, todos) => {
+            if (err)
+                console.log(handleError(err));
+            res.json(todos);
         })
     })
 })

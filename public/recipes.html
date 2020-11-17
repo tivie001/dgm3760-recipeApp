@@ -184,7 +184,7 @@
         </dialog>
           <dialog class="mdl-dialog" id="ingredsDialog">
               <h4 class="mdl-dialog__title" style="color: #ffc439"><i class="material-icons" style="font-size: 38px; padding-right: 1rem">
-                  menu_book</i>Add Ingredients to List
+                  restaurant</i>Add Ingredients to List
               </h4>
               <div class="mdl-dialog__content">
                   <form id="addIngredsListForm" enctype="multipart/form-data">
@@ -206,7 +206,7 @@
                           onclick="addIngredientToList()">
                       Add Ingredients To List
                   </button>
-                  <button type="button" class="mdl-button close" style="color: red">Cancel</button>
+                  <button type="button" class="mdl-button close" style="color: red" onclick="closeModal()">Cancel</button>
               </div>
           </dialog>
           <dialog class="mdl-dialog add-recipe-dialog" id="editDialog">
@@ -288,7 +288,7 @@
                           <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect close" onclick="updateRecipe()">
                               Save Changes
                           </button>
-                          <button type="button" class="mdl-button close" style="color: red">Cancel</button>
+                          <button type="button" class="mdl-button close" style="color: red" onclick="closeModal()">Cancel</button>
                       </div>
                   </form>
               </div>
