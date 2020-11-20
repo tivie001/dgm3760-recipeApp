@@ -1,8 +1,10 @@
 const url = 'http://localhost:3000'
 const imageURL = "https://api.unsplash.com/";
 const API_KEY = 'eRc8A7PplvKHhAGhzHyRcYKg4sgGLvgWN7MmZ_TtP5I';
+let searchedImages;
 let recipes = [];
 let lists = [];
+let images = [];
 let selectedRecipeDetails = [];
 let selectedListDetails = [];
 const recipeForm = document.querySelector('#addRecipeForm');
@@ -62,7 +64,7 @@ function getRecipeDetails(id) {
 
     document.getElementById("cardContainer").innerHTML +=
             `<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                <img class="card-image" src="images/header-image.jpg"/>
+                <img class="card-image" src="${recipeDetails[0].img}"/>
                 <div class="card-title">
                   <h2>${recipeDetails[0].title}</h2>
                   <h4 style="color: #868686">${recipeDetails[0].subTitle}</h4>
@@ -172,7 +174,8 @@ if (recipeForm){
         const prepHours = document.querySelector("#prepHours").value;
         const prepMins = document.querySelector("#prepMins").value;
         const prepDetails = document.querySelector("#prepDetails").value;
-        // const imagePath = document.getElementById("b64").innerHTML;
+        const imagePath = document.querySelector(".img-selected").src;
+        console.log(imagePath);
 
         let ingreds, i, steps, x;
         ingreds = document.querySelectorAll(".ingredient");
@@ -194,7 +197,8 @@ if (recipeForm){
             prepMins,
             prepDetails,
             ingredients,
-            directions
+            directions,
+            imagePath
         };
         if (title && subTitle) {
             async function addRecipe() {
@@ -440,10 +444,9 @@ function showIngredientsDialog(details) {
 }
 
 function formatIngredsTable(details) {
-    console.log(details);
     let tableRows = '';
     if (details) {
-        details[0].ingredients.forEach((item, index) => {
+        details.ingredients.forEach((item, index) => {
             if (item)
                 tableRows += ` 
                     <tr>
@@ -536,12 +539,12 @@ function removeIndex(index) {
     ingredientsContainer = document.getElementById( 'editIngredients');
     const ingredientDiv = ingredientsContainer.getElementsByTagName("section")[index];
     const input = ingredientDiv.getElementsByClassName('edit-ingredient');
-    selectedRecipeDetails[0].ingredients.splice(index, 1);
+    selectedRecipeDetails.ingredients.splice(index, 1);
     ingredientDiv.classList.add('hide-element');
     input[0].classList.remove('edit-ingredient');
 }
 function editAddIngredients() {
-    const index = (selectedRecipeDetails[0].ingredients.length);
+    const index = (selectedRecipeDetails.ingredients.length);
     var str = `<section id="${index}"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input edit-ingredient" type="text" id="editIngredient">
                     <label class="mdl-textfield__label" for="editIngredient">New Ingredient</label>
@@ -572,7 +575,7 @@ function editAddDirections() {
 function updateRecipe(){
     const ingredients = [];
     const directions = [];
-    const id = selectedRecipeDetails[0]._id;
+    const id = selectedRecipeDetails._id;
     const ingredientsContainer = document.querySelectorAll('.edit-ingredient');
     const directionsContainer = document.querySelectorAll('.edit-direction');
     ingredientsContainer.forEach((ingredient) => {
@@ -610,30 +613,28 @@ function updateRecipe(){
 function searchImages(){
     const searchTerm = document.querySelector('#imgSearch').value;
     let newImg;
-    fetch(imageURL + `search/photos?client_id=${API_KEY}&query=${searchTerm}`, {
+    fetch(imageURL + `search/photos?client_id=${API_KEY}&query=${searchTerm}&orientation=landscape`, {
         headers: {
             "Accept-Version": "v1"
         }
     })
         .then((res => res.json()))
         .then(function(res) {
+            console.log(res);
             res.results.forEach((img, index) => {
-                newImg += `<img src=${img.urls.small} alt="${img.alt_description}" id="${index}" width="200" height="200" class="search-images"/>`
+                images.push(img);
+                newImg += `<img src=${img.urls.regular} alt="${img.alt_description}" id="${img.id}" width="200" height="200" class="search-images" onclick="imageSelect(this.id)"/>`
             })
             document.getElementById("imageContainer").innerHTML = newImg;
         }).catch(function(err) {
         console.log(err);
     })
 }
-// fetch(imageURL + `search/photos?client_id=${API_KEY}&query=pumpkin`, {
-//     headers: {
-//         "Accept-Version": "v1"
-//     }
-// })
-//     .then((res => res.json()))
-//     .then(function(res) {
-//
-//         console.log(res);
-//     }).catch(function(err) {
-//     console.log(err);
-// })
+function imageSelect(id){
+    const searchedImages = document.querySelectorAll('.search-images')
+    searchedImages.forEach(el => {
+        el.classList.remove("img-selected");
+    })
+    const selectedImg = document.getElementById(id);
+    selectedImg.classList.add("img-selected");
+}

@@ -13,10 +13,7 @@ const RecipeSchema = new Schema({
     difficulty: String,
     ingredients: Array,
     directions: Array,
-    // img: {
-    //     data: Buffer,
-    //     contentType: String
-    // }
+    img: String
 })
 
 module.exports = mongoose.model('Recipe', RecipeSchema);

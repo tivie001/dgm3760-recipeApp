@@ -46,7 +46,7 @@
     align-items: center;
 }
 .card-image {
-    height: 200px;
+    height: 550px;
 }
 .card-title {
     font-family: Raleway;
@@ -133,5 +133,9 @@
     overflow-x: scroll;
 }
 .search-images {
-    padding: 0 .5rem 0 .5rem;
+    margin: 0 .5rem 0 .5rem;
+}
+/*======== CONDITIONAL STYLES ========*/
+.img-selected {
+    border: 4px solid #ffc439;
 }

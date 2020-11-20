@@ -57,7 +57,7 @@ app.post('/api/addRecipe',(req, res) => {
         difficulty: req.body.difficulty,
         ingredients: req.body.ingredients,
         directions: req.body.directions,
-        // img: req.file
+        img: req.body.imagePath
     }, (err) => {
         if (err)
             console.log(err);
