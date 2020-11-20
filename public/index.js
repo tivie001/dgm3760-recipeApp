@@ -44,7 +44,7 @@ function getRecipes() {
 
 function getRecipeDetails(id) {
     const recipeDetails = recipes.filter((recipe) => recipe._id === id);
-    selectedRecipeDetails.push(recipeDetails[0]);
+    selectedRecipeDetails = recipeDetails[0];
     document.getElementById("cardContainer").innerHTML = '';
     let ingredientStr = '';
     let directionStr = '';
@@ -488,17 +488,17 @@ function addIngredientToList() {
 }
 
 function toggleEditRecipe() {
-    const recipeDetails = selectedRecipeDetails[0];
+    const recipeDetails = selectedRecipeDetails;
     console.log(recipeDetails);
-    document.querySelector( '#editTitle').value = recipeDetails.title;
-    document.querySelector( '#editSubTitle').value = recipeDetails.subTitle;
-    document.querySelector( '#editTotalHours').value = recipeDetails.totalHours;
-    document.querySelector( '#editTotalMin').value = recipeDetails.totalMins;
-    document.querySelector( '#editRating').value = recipeDetails.rating;
-    document.querySelector( '#editDifficulty').value = recipeDetails.difficulty;
-    document.querySelector( '#editPrepHours').value = recipeDetails.prepHours;
-    document.querySelector( '#editPrepMins').value = recipeDetails.prepMins;
-    document.querySelector( '#editPrepDetails').value = recipeDetails.prepDetails;
+    document.querySelector('#editTitle').value = recipeDetails.title;
+    document.querySelector('#editSubTitle').value = recipeDetails.subTitle;
+    document.querySelector('#editTotalHours').value = recipeDetails.totalHours;
+    document.querySelector('#editTotalMin').value = recipeDetails.totalMins;
+    document.querySelector('#editRating').value = recipeDetails.rating;
+    document.querySelector('#editDifficulty').value = recipeDetails.difficulty;
+    document.querySelector('#editPrepHours').value = recipeDetails.prepHours;
+    document.querySelector('#editPrepMins').value = recipeDetails.prepMins;
+    document.querySelector('#editPrepDetails').value = recipeDetails.prepDetails;
 
     ingredientsContainer = document.getElementById( 'editIngredients');
     recipeDetails.ingredients.forEach((ingred, index) => {
@@ -605,20 +605,3 @@ function updateRecipe(){
             console.log(error);
         })
 }
-
-// <td>
-//     <label
-//         className="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select mdl-js-ripple-effect--ignore-events is-upgraded"
-//         data-upgraded=",MaterialCheckbox,MaterialRipple">
-//         <input type="checkbox" className="mdl-checkbox__input" id="${index}">
-//             <span className="mdl-checkbox__focus-helper"></span>
-//             <span className="mdl-checkbox__box-outline">
-//                                 <span className="mdl-checkbox__tick-outline"></span>
-//                             </span>
-//             <span className="mdl-checkbox__ripple-container mdl-js-ripple-effect mdl-ripple--center"
-//                   data-upgraded=",MaterialRipple">
-//                                 <span className="mdl-ripple is-animating"
-//                                       style="width: 103.823px; height: 103.823px; transform: translate(-50%, -50%) translate(18px, 18px);"></span>
-//                             </span>
-//     </label>
-// </td>
