@@ -1,4 +1,6 @@
 const url = 'http://localhost:3000'
+const imageURL = "https://api.unsplash.com/";
+const API_KEY = 'eRc8A7PplvKHhAGhzHyRcYKg4sgGLvgWN7MmZ_TtP5I';
 let recipes = [];
 let lists = [];
 let selectedRecipeDetails = [];
@@ -605,3 +607,33 @@ function updateRecipe(){
             console.log(error);
         })
 }
+function searchImages(){
+    const searchTerm = document.querySelector('#imgSearch').value;
+    let newImg;
+    fetch(imageURL + `search/photos?client_id=${API_KEY}&query=${searchTerm}`, {
+        headers: {
+            "Accept-Version": "v1"
+        }
+    })
+        .then((res => res.json()))
+        .then(function(res) {
+            res.results.forEach((img, index) => {
+                newImg += `<img src=${img.urls.small} alt="${img.alt_description}" id="${index}" width="200" height="200" class="search-images"/>`
+            })
+            document.getElementById("imageContainer").innerHTML = newImg;
+        }).catch(function(err) {
+        console.log(err);
+    })
+}
+// fetch(imageURL + `search/photos?client_id=${API_KEY}&query=pumpkin`, {
+//     headers: {
+//         "Accept-Version": "v1"
+//     }
+// })
+//     .then((res => res.json()))
+//     .then(function(res) {
+//
+//         console.log(res);
+//     }).catch(function(err) {
+//     console.log(err);
+// })

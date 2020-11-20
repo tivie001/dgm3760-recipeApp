@@ -125,3 +125,13 @@
 .hide-element {
     display: none;
 }
+#imageContainer {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    width: 100%;
+    overflow-x: scroll;
+}
+.search-images {
+    padding: 0 .5rem 0 .5rem;
+}
