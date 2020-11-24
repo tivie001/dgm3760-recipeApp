@@ -46,7 +46,7 @@
     align-items: center;
 }
 .card-image {
-    height: 550px;
+    height: 650px;
 }
 .card-title {
     font-family: Raleway;
@@ -127,7 +127,6 @@
 }
 #imageContainer {
     display: flex;
-    justify-content: space-evenly;
     flex-direction: row;
     width: 100%;
     overflow-x: scroll;

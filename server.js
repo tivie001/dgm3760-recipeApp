@@ -22,7 +22,7 @@ app.listen(process.env.PORT || 3000, () =>{
 })
 
 
-// ============== RECIPE APP CRUD METHODS =============
+// ============== RECIPE CRUD METHODS =============
 // ============== (GET) GET DATA =============
 app.get('/api', (req, res) => {
     Recipe.find((err, recipes) => {
@@ -68,6 +68,39 @@ app.post('/api/addRecipe',(req, res) => {
         })
     })
 })
+// ============== (PUT) UPDATE RECIPE =============
+app.put('/api/:id', (req, res) => {
+    Recipe.findById(req.params.id, (err, recipe) => {
+        if (err)
+            console.log(handleError(err));
+        recipe.update(req.body, (err) => {
+            if (err)
+                console.log(err);
+            Recipe.find((err, recipe) => {
+                if (err)
+                    console.log(handleError(err));
+                res.json(recipe);
+            })
+        })
+    })
+})
+
+// ============== (DELETE) RECIPE =============
+app.delete('/api/:id', (req, res) => {
+    Recipe.remove({
+        _id: req.params.id
+    }, (err) => {
+        if (err)
+            console.log(handleError(err));
+        Recipe.find((err, todos) => {
+            if (err)
+                console.log(handleError(err));
+            res.json(todos);
+        })
+    })
+})
+// ============== LIST CRUD METHODS =============
+
 app.post('/api/addList' ,(req, res) => {
     console.log(req.body);
 
@@ -86,7 +119,7 @@ app.post('/api/addList' ,(req, res) => {
         })
     })
 })
-// ============== (PUT) UPDATE FUNCTIONS =============
+// ============== (PUT) UPDATE LIST =============
 app.put('/api/updateList/:id', (req, res) => {
     List.findById(req.params.id, (err, list) => {
         if (err)
@@ -98,21 +131,6 @@ app.put('/api/updateList/:id', (req, res) => {
                 if (err)
                     console.log(handleError(err));
                 res.json(list);
-            })
-        })
-    })
-})
-app.put('/api/:id', (req, res) => {
-    Recipe.findById(req.params.id, (err, recipe) => {
-        if (err)
-            console.log(handleError(err));
-        recipe.update(req.body, (err) => {
-            if (err)
-                console.log(err);
-            Recipe.find((err, recipe) => {
-                if (err)
-                    console.log(handleError(err));
-                res.json(recipe);
             })
         })
     })
@@ -137,19 +155,6 @@ app.put('/api/addIngreds/:id', (req, res) => {
                     console.log(handleError(err));
                 res.json(list);
             })
-        })
-    })
-})
-app.delete('/api/:id', (req, res) => {
-    List.remove({
-        _id: req.params.id
-    }, (err) => {
-        if (err)
-            console.log(handleError(err));
-        Todo.find((err, todos) => {
-            if (err)
-                console.log(handleError(err));
-            res.json(todos);
         })
     })
 })

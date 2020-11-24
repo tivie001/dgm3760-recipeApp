@@ -79,7 +79,7 @@
         </div>
 
         <!--==================== DIALOGS ====================-->
-        <dialog class="mdl-dialog add-recipe-dialog">
+        <dialog class="mdl-dialog add-recipe-dialog" id="addRecipeDialog">
           <h4 class="mdl-dialog__title" style="color: #ffc439"><i class="material-icons" style="font-size: 38px; padding-right: 1rem">
             menu_book</i>Add New Recipe
           </h4>
@@ -185,7 +185,7 @@
                     <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect close">
                         Add New Recipe
                     </button>
-                    <button type="button" class="mdl-button close" style="color: red">Cancel</button>
+                    <button type="button" class="mdl-button close" style="color: red" onclick="closeModal()">Cancel</button>
                 </div>
             </form>
           </div>
@@ -297,6 +297,12 @@
                               Save Changes
                           </button>
                           <button type="button" class="mdl-button close" style="color: red" onclick="closeModal()">Cancel</button>
+                      </div>
+                      <div style="text-align: center; margin-top: 2rem">
+                          <button type="button" class="mdl-button close" style="color: red" onclick="deleteRecipe()">
+                              Delete Recipe
+                              <i class="material-icons">delete</i>
+                          </button>
                       </div>
                   </form>
               </div>

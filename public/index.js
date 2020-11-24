@@ -136,8 +136,10 @@ function getRecipeDetails(id) {
     });
 }
 function closeModal() {
+    const recipeDialog = document.getElementById('addRecipeDialog');
     const ingredsDialog = document.getElementById('ingredsDialog');
     const editDialog = document.getElementById('editDialog');
+    recipeDialog.close();
     ingredsDialog.close();
     editDialog.close();
 }
@@ -218,6 +220,17 @@ if (recipeForm){
         }
 
     });
+}
+function deleteRecipe() {
+    axios.delete(`/api/${selectedRecipeDetails._id}`)
+        .then(function () {
+            closeModal();
+            document.getElementById("recipeNameTable").innerHTML = getRecipes();
+            getLists();
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }
 function addIngredient() {
     var str = '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">\n' +
@@ -612,20 +625,21 @@ function updateRecipe(){
 }
 function searchImages(){
     const searchTerm = document.querySelector('#imgSearch').value;
+    const imageContainer = document.getElementById("imageContainer");
     let newImg;
-    fetch(imageURL + `search/photos?client_id=${API_KEY}&query=${searchTerm}&orientation=landscape`, {
+    fetch(imageURL + `search/photos?client_id=${API_KEY}&query=${searchTerm}&orientation=landscape&per_page=20`, {
         headers: {
             "Accept-Version": "v1"
         }
     })
         .then((res => res.json()))
         .then(function(res) {
-            console.log(res);
-            res.results.forEach((img, index) => {
+            res.results.forEach((img) => {
                 images.push(img);
-                newImg += `<img src=${img.urls.regular} alt="${img.alt_description}" id="${img.id}" width="200" height="200" class="search-images" onclick="imageSelect(this.id)"/>`
+                if (img || img !== undefined)
+                    newImg = `<img src=${img.urls.regular} alt="${img.alt_description}" id="${img.id}" width="200" height="175" class="search-images" onclick="imageSelect(this.id)"/>`
+                    imageContainer.insertAdjacentHTML( 'beforeend', newImg);
             })
-            document.getElementById("imageContainer").innerHTML = newImg;
         }).catch(function(err) {
         console.log(err);
     })
