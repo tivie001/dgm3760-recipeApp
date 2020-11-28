@@ -64,13 +64,16 @@
         <main class="mdl-layout__content mdl-color--grey-100">
             <div class="main-container">
               <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect"
-              style="margin: 1rem 0 0 1rem">
+                      style="margin: 1rem 0 0 1rem">
                 Add New List <i class="material-icons">add_circle</i>
               </button>
-                <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet" id="listCards"></div>
-                    <div class="mdl-cell mdl-cell--5-col mdl-cell--8-col-tablet" id="listDetailsContainer"></div>
-                </div>
+              <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin: 1rem 0 0 1rem">
+                Edit Lists <i class="material-icons">create</i>
+              </button>
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--7-col mdl-cell--8-col-tablet" id="listCards"></div>
+                <div class="mdl-cell mdl-cell--5-col mdl-cell--8-col-tablet" id="listDetailsContainer"></div>
+              </div>
             </div>
             <!--==================== ADD RECIPE FORM ====================-->
             <dialog class="mdl-dialog add-recipe-dialog">
