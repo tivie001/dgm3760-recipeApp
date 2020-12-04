@@ -273,6 +273,7 @@ function getLists() {
             let tableRows = [];
             const myLists = response.data;
             console.log(myLists);
+            lists = [];
             myLists.forEach((list) => {
                 lists.push(list);
                 tableRows += `<div class="list-container">
@@ -305,7 +306,6 @@ function getLists() {
 function getListDetails(id) {
     const listDetails = lists.filter((list) => list._id === id);
     selectedListDetails = listDetails[0];
-    console.log(selectedListDetails);
     document.getElementById("listDetailsContainer").innerHTML = '';
     let listItems = '';
     listDetails[0].items.forEach((item, index) => {
@@ -349,12 +349,24 @@ function getListDetails(id) {
             </thead>
             <tbody>
                 ${listItems}
+                <tr>
+                    <td colspan="3">
+                        <form action="#">
+                          <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="addListItem">
+                          </div>
+                          <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="${listDetails[0]._id}" onclick="addNewTodoItem(this.id)">                       
+                            <i class="material-icons">library_add</i>
+                          </button>
+                        </form>
+                        <p style="text-align: left">+ Add New List Item</p>
+                    </td>
+                </tr>
             </tbody>
         </table>`
     checkboxLabel = document.querySelectorAll( '.mdl-checkbox');
     checkboxLabel.forEach(checkbox => {
         checkbox.removeAttribute("data-upgraded");
-        // componentHandler.upgradeDom();
     })
 }
 if (listForm) {
@@ -420,7 +432,7 @@ function deleteTodoItem(index) {
     axios.put(`/api/updateList/${id}`, selectedListDetails)
         .then(function () {
             getLists();
-            document.getElementById("listDetailsContainer").innerHTML = ''
+            document.getElementById("listDetailsContainer").innerHTML = '';
             getListDetails(id);
         })
         .catch(function (error) {
@@ -685,4 +697,27 @@ $('#searchRecipes').on('keyup change', function (event) {
     })
     document.getElementById("recipeNameTable").innerHTML = tableRows;
 });
+function addNewTodoItem() {
+    let addedIngreds = [];
+    const id = selectedListDetails._id;
+    const newTodoItem = document.getElementById("addListItem").value;
+    todoObj = {
+        name: newTodoItem,
+        completed: false
+    }
+    addedIngreds.push(todoObj);
+
+    axios.put(`/api/addIngreds/${id}`, addedIngreds)
+        .then(function () {
+            getLists();
+
+            selectedListDetails.items.push(todoObj);
+            document.getElementById("listDetailsContainer").innerHTML = '';
+            getListDetails(id);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+
+}
 
