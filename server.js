@@ -92,10 +92,10 @@ app.delete('/api/:id', (req, res) => {
     }, (err) => {
         if (err)
             console.log(handleError(err));
-        Recipe.find((err, todos) => {
+        Recipe.find((err, recipes) => {
             if (err)
                 console.log(handleError(err));
-            res.json(todos);
+            res.json(recipes);
         })
     })
 })
@@ -119,11 +119,13 @@ app.post('/api/addList' ,(req, res) => {
         })
     })
 })
-// ============== (PUT) UPDATE LIST =============
+// ============== (PUTS) UPDATE LIST =============
 app.put('/api/updateList/:id', (req, res) => {
+    console.log(req.body);
     List.findById(req.params.id, (err, list) => {
         if (err)
             console.log(handleError(err));
+        // console.log(list);
         list.update({items: req.body.items}, (err) => {
             if (err)
                 console.log(err);
@@ -135,7 +137,7 @@ app.put('/api/updateList/:id', (req, res) => {
         })
     })
 })
-
+// ============== (PUTS) ADD INGREDIENTS TO LIST =============
 app.put('/api/addIngreds/:id', (req, res) => {
     let newItems;
     List.findById(req.params.id, (err, list) => {
@@ -155,6 +157,21 @@ app.put('/api/addIngreds/:id', (req, res) => {
                     console.log(handleError(err));
                 res.json(list);
             })
+        })
+    })
+})
+
+// ============== (DELETE) LIST =============
+app.delete('/api/updateList/:id', (req, res) => {
+    List.remove({
+        _id: req.params.id
+    }, (err) => {
+        if (err)
+            console.log(handleError(err));
+        List.find((err, lists) => {
+            if (err)
+                console.log(handleError(err));
+            res.json(lists);
         })
     })
 })

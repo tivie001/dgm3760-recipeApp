@@ -7,6 +7,7 @@ let lists = [];
 let images = [];
 let selectedRecipeDetails = [];
 let selectedListDetails = [];
+let toggleDeleteList = false;
 const recipeForm = document.querySelector('#addRecipeForm');
 const listForm = document.querySelector('#addListForm');
 
@@ -278,6 +279,8 @@ dialog.querySelector('.close').addEventListener('click', function() {
     dialog.close();
 });
 
+
+
 function getLists() {
     axios.get('/api/lists')
         .then(function (response) {
@@ -286,19 +289,25 @@ function getLists() {
             console.log(myLists);
             myLists.forEach((list) => {
                 lists.push(list);
-                tableRows += `<div class="demo-card-wide mdl-card mdl-shadow--2dp" id="${list._id}" style="margin-top: 2rem">
-                            <div class='${list.category === "Shopping" ? "mdl-card__title shopping-list-card" : "mdl-card__title general-list-card"}'>
-                                <h2 class="mdl-card__title-text">
-                                    <i class="material-icons" style="padding-right: 1rem">${list.category === 'Shopping' ? 'shopping_cart' : 'list'}</i>
-                                    ${list.listTitle}
-                                </h2>
-                            </div>
-                            <div class="mdl-card__actions mdl-card--border">
-                                <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="${list._id}" onclick="getListDetails(this.id)">
-                                    View List
+                tableRows += `<div class="list-container">
+                                <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon list-delete-icon"
+                                 style="display: none" id="${list._id}" onclick="deleteList(this.id)">                       
+                                    <i class="material-icons" style="color: red">delete</i>
                                 </button>
-                            </div>
-                        </div>`
+                                <div class="demo-card-wide mdl-card mdl-shadow--2dp" id="${list._id}" style="margin-top: 2rem">
+                                    <div class='${list.category === "Shopping" ? "mdl-card__title shopping-list-card" : "mdl-card__title general-list-card"}'>
+                                        <h2 class="mdl-card__title-text">
+                                            <i class="material-icons" style="padding-right: 1rem">${list.category === 'Shopping' ? 'shopping_cart' : 'list'}</i>
+                                            ${list.listTitle}
+                                        </h2>
+                                    </div>
+                                    <div class="mdl-card__actions mdl-card--border">
+                                        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" id="${list._id}" onclick="getListDetails(this.id)">
+                                            View List
+                                        </button>
+                                    </div>
+                                </div>
+                              </div>`
             })
             document.getElementById("listCards").innerHTML = tableRows;
         })
@@ -407,7 +416,7 @@ function updateListItem(id, index) {
     const indexedItem = listItem[0].items[index];
     indexedItem.completed = !indexedItem.completed;
 
-    axios.put(`/api/updateList/${id}`, listItem)
+    axios.put(`/api/updateList/${id}`, listItem[0])
         .then(function () {
             getLists();
             document.getElementById("listDetailsContainer").innerHTML = ''
@@ -616,7 +625,7 @@ function updateRecipe(){
 
     axios.put(`/api/${id}`, bodyData)
         .then(function () {
-            getRecipeDetails(id)
+            getRecipeDetails(id);
             closeModal();
         })
         .catch(function (error) {
@@ -651,4 +660,28 @@ function imageSelect(id){
     })
     const selectedImg = document.getElementById(id);
     selectedImg.classList.add("img-selected");
+}
+function toggleDeleteLists(){
+    toggledDeleteLists = document.querySelectorAll( '.list-delete-icon');
+    toggleDeleteList = !toggleDeleteList;
+    if (toggleDeleteList) {
+        toggledDeleteLists.forEach(list => {
+            list.style.display = 'block';
+        })
+    } else {
+        toggledDeleteLists.forEach(list => {
+            list.style.display = 'none';
+        })
+    }
+}
+function deleteList(id) {
+    axios.delete(`/api/updateList/${id}`)
+        .then(function () {
+            getLists();
+            document.getElementById("listDetailsContainer").innerHTML = ''
+            toggleDeleteList = false;
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 }
