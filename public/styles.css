@@ -12,6 +12,10 @@
     height: 850px;
     overflow-y: scroll;
 }
+#cardContainer {
+    height: 1200px;
+    overflow-y: scroll;
+}
 .card-buttons {
     display: flex;
     justify-content: space-between;
@@ -71,6 +75,9 @@
 }
 
 /*======== TABLE STYLES ========*/
+.recipe-table {
+    width: 350px;
+}
 #listTable {
     /*width: 100%;*/
 }

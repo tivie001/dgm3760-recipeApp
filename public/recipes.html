@@ -48,8 +48,8 @@
         <header class="demo-drawer-header">
           <i class="material-icons" id="menuBookIcon">menu_book</i>
           <div class="account-row">
-            <i class="material-icons">account_circle</i>
-            <h6 class="account-name">Welcome, Tyler</h6>
+<!--            <i class="material-icons">account_circle</i>-->
+<!--            <h6 class="account-name">Welcome, Tyler</h6>-->
           </div>
         </header>
         <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
@@ -66,15 +66,27 @@
         </div>
         <div class="main-container">
           <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet">
+            <div class="mdl-cell mdl-cell--3-col mdl-cell--3-col-tablet">
                 <button id="show-dialog" type="button" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect">
                     Add New Recipe <i class="material-icons">add_circle</i>
                 </button>
-                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable" style="margin-top: 1.5rem">
+                <form action="#">
+                    <label class="mdl-button mdl-js-button mdl-button--icon">
+                        <i class="material-icons">search</i>
+                    </label>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="searchRecipes">
+                        <label class="mdl-textfield__label" for="searchRecipes">Search By Title</label>
+                    </div>
+                </form>
+                <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable recipe-table" style="margin-top: 1.5rem">
                     <tbody id="recipeNameTable"></tbody>
                 </table>
             </div>
-            <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet" id="cardContainer"></div>
+            <div class="mdl-cell mdl-cell--9-col mdl-cell--9-col-tablet" id="selectRecipeText" style="display: flex; justify-content: center; align-items: center">
+                <h3 style="color: #9f9f9f; text-align: center">Select a recipe to view more details</h3>
+            </div>
+            <div class="mdl-cell mdl-cell--9-col mdl-cell--9-col-tablet" id="cardContainer"></div>
           </div>
         </div>
 
@@ -313,6 +325,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script defer src="js/getmdl-select.min.js"></script>
     <script src="index.js"></script>
   </body>

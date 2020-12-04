@@ -49,6 +49,7 @@ function getRecipes() {
 
 function getRecipeDetails(id) {
     const recipeDetails = recipes.filter((recipe) => recipe._id === id);
+    document.getElementById("selectRecipeText").style.display = "none";
     selectedRecipeDetails = recipeDetails[0];
     document.getElementById("cardContainer").innerHTML = '';
     let ingredientStr = '';
@@ -144,23 +145,6 @@ function closeModal() {
     ingredsDialog.close();
     editDialog.close();
 }
-// document.getElementById("file").addEventListener("change", readFile);
-
-// function readFile() {
-//     let b64URL;
-//
-//     if (this.files && this.files[0]) {
-//
-//         let FR = new FileReader();
-//
-//         FR.addEventListener("load", function(e) {
-//             document.getElementById("img").src       = e.target.result;
-//             b64URL = document.getElementById("b64").innerHTML = e.target.result;
-//         });
-//         FR.readAsDataURL( this.files[0] );
-//     }
-//     return b64URL;
-// }
 
 // ******* ADD RECIPE (POST) *******
 if (recipeForm){
@@ -226,6 +210,8 @@ function deleteRecipe() {
     axios.delete(`/api/${selectedRecipeDetails._id}`)
         .then(function () {
             closeModal();
+            document.getElementById("cardContainer").innerHTML = '';
+            document.getElementById("selectRecipeText").style.display = "flex";
             document.getElementById("recipeNameTable").innerHTML = getRecipes();
             getLists();
         })
@@ -685,3 +671,18 @@ function deleteList(id) {
             console.log(error);
         })
 }
+$('#searchRecipes').on('keyup change', function (event) {
+    let tableRows = [];
+    let filteredRecipe = recipes.filter(
+        recipe => recipe.title.toLowerCase().includes(event.target.value.toLowerCase())
+    );
+    filteredRecipe.forEach((recipe) => {
+        tableRows += `<tr id="${recipe._id}" onclick="getRecipeDetails(this.id)">
+                                <td class="mdl-data-table__cell--non-numeric">${recipe.title}
+                                    <br><small class="subtitle-name">${recipe.subTitle}</small>
+                                </td>
+                              </tr>`
+    })
+    document.getElementById("recipeNameTable").innerHTML = tableRows;
+});
+
