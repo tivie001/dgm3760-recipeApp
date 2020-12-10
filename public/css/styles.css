@@ -3,10 +3,10 @@
     font-weight: 400;
 }
 #myRecipesCard > .mdl-card__title{
-    background: url('images/utensils.png') center / cover;
+    background: url('../images/utensils.png') center / cover;
 }
 #myListsCard > .mdl-card__title{
-    background: url('images/list.png') center / cover;
+    background: url('../images/list.png') center / cover;
 }
 #listCards {
     height: 850px;
@@ -76,7 +76,7 @@
 
 /*======== TABLE STYLES ========*/
 .recipe-table {
-    width: 350px;
+    margin-right: 1rem;
 }
 #listTable {
     /*width: 100%;*/

@@ -46,7 +46,6 @@ function getRecipes() {
         })
 }
 
-
 function getRecipeDetails(id) {
     const recipeDetails = recipes.filter((recipe) => recipe._id === id);
     document.getElementById("selectRecipeText").style.display = "none";
@@ -683,7 +682,7 @@ function deleteList(id) {
             console.log(error);
         })
 }
-$('#searchRecipes').on('keyup change', function (event) {
+$('#searchRecipes').on('keyup', function (event) {
     let tableRows = [];
     let filteredRecipe = recipes.filter(
         recipe => recipe.title.toLowerCase().includes(event.target.value.toLowerCase())
@@ -694,7 +693,7 @@ $('#searchRecipes').on('keyup change', function (event) {
                                     <br><small class="subtitle-name">${recipe.subTitle}</small>
                                 </td>
                               </tr>`
-    })
+    });
     document.getElementById("recipeNameTable").innerHTML = tableRows;
 });
 function addNewTodoItem() {

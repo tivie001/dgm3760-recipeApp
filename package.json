@@ -2,7 +2,7 @@
   "name": "recipe-app",
   "version": "1.0.0",
   "description": "Full stack web recipe app (i.e. Vanilla HTML, CSS, & JS, NodeJS server (ExpressJS), & MongoDB",
-  "main": "public/index.js",
+  "main": "public/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

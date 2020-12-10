@@ -4,9 +4,6 @@ const mongoose = require('mongoose');
 const Recipe = require('./models/recipeModel');
 const List = require('./models/listModel');
 require('dotenv/config');
-const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
-
 const app = express();
 const PORT = 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
