@@ -252,18 +252,6 @@ function addTodoItem() {
     componentHandler.upgradeDom();
 }
 
-var dialog = document.querySelector('dialog');
-var showDialogButton = document.querySelector('#show-dialog');
-if (! dialog.showModal) {
-    dialogPolyfill.registerDialog(dialog);
-}
-showDialogButton.addEventListener('click', function() {
-    dialog.showModal();
-});
-dialog.querySelector('.close').addEventListener('click', function() {
-    dialog.close();
-});
-
 
 
 function getLists() {
@@ -705,11 +693,9 @@ function addNewTodoItem() {
         completed: false
     }
     addedIngreds.push(todoObj);
-
     axios.put(`/api/addIngreds/${id}`, addedIngreds)
         .then(function () {
             getLists();
-
             selectedListDetails.items.push(todoObj);
             document.getElementById("listDetailsContainer").innerHTML = '';
             getListDetails(id);
@@ -717,6 +703,33 @@ function addNewTodoItem() {
         .catch(function (error) {
             console.log(error);
         })
-
 }
+// let dialog = document.querySelector('dialog');
+let addRecipeDialog = document.getElementById('addRecipeDialog');
+let addListDialog = document.getElementById('addListDialog');
+let showRecipeDialogButton = document.querySelector('#showDialog');
+let showListDialogButton = document.querySelector('#showListDialog');
+if (addRecipeDialog) {
+    if (!addRecipeDialog.showModal) {
+        dialogPolyfill.registerDialog(addRecipeDialog);
+    }
+    showRecipeDialogButton.addEventListener('click', function() {
+        addRecipeDialog.showModal();
+    });
+    addRecipeDialog.querySelector('.close').addEventListener('click', function() {
+        addRecipeDialog.close();
+    });
+}
+if (addListDialog) {
+    if (!addListDialog.showModal) {
+        dialogPolyfill.registerDialog(addListDialog);
+    }
+    showListDialogButton.addEventListener('click', function() {
+        addListDialog.showModal();
+    });
+    addListDialog.querySelector('.close').addEventListener('click', function() {
+        addListDialog.close();
+    });
+}
+
 
