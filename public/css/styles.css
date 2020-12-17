@@ -9,11 +9,9 @@
     background: url('../images/list.png') center / cover;
 }
 #listCards {
-    height: 850px;
     overflow-y: scroll;
 }
 #cardContainer {
-    height: 1200px;
     overflow-y: scroll;
 }
 .card-buttons {
@@ -41,7 +39,7 @@
     background: #37474F;
 }
 .general-list-card {
-    background: #ffc439;
+    background: #00BCD4;
 }
 .list-container {
     display: flex;
@@ -54,9 +52,6 @@
     justify-content: center;
     flex-direction: row;
     align-items: center;
-}
-.card-image {
-    height: 650px;
 }
 .card-title {
     font-family: Raleway;
@@ -73,13 +68,52 @@
     justify-content: space-around;
     flex-direction: row;
 }
-
+.details-row {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    color: #868686;
+    font-variant: all-small-caps;
+    text-align: center;
+    flex-wrap: wrap;
+}
+@media screen and (min-device-width: 1200px) {
+    .card-image {
+        height: 600px;
+    }
+    #cardContainer {
+        height: 1200px;
+    }
+    #listCards {
+        height: 850px;
+    }
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 1199px) {
+    .card-image {
+        height: 300px;
+    }
+    #cardContainer {
+        height: 900px;
+    }
+    #listCards {
+        height: 900px;
+    }
+}
+@media only screen and (max-device-width: 480px) {
+    .card-image {
+        height: 200px;
+    }
+    #cardContainer {
+        height: 100%;
+    }
+    #listCards {
+        height: 100%;
+    }
+}
 /*======== TABLE STYLES ========*/
 .recipe-table {
-    margin-right: 1rem;
-}
-#listTable {
-    /*width: 100%;*/
+    margin-right: 3rem;
+    width: 90%;
 }
 #listDetailsContainer {
     margin-top: 2.5rem;
@@ -89,14 +123,6 @@
 }
 .subtitle-name {
     color: #868686;
-}
-.details-row {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    color: #868686;
-    font-variant: all-small-caps;
-    text-align: center;
 }
 .featured-details {
     font-size: 20px;

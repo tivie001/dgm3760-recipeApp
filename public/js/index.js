@@ -124,8 +124,6 @@ function getRecipeDetails(id) {
 
     let editDialog = document.getElementById('editDialog');
     let showEditDialogBtn = document.querySelector('#showEditDialog');
-    console.log(editDialog);
-    console.log(showEditDialogBtn);
     if (! editDialog.showModal) {
         dialogPolyfill.registerDialog(editDialog);
     }
@@ -146,6 +144,12 @@ function closeModal() {
 }
 
 // ******* ADD RECIPE (POST) *******
+document.getElementById("addRecipeDialog").onkeypress = function(e) {
+    var key = e.charCode || e.keyCode || 0;
+    if (key == 13) {
+        e.preventDefault();
+    }
+}
 if (recipeForm){
     recipeForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -161,7 +165,6 @@ if (recipeForm){
         const prepMins = document.querySelector("#prepMins").value;
         const prepDetails = document.querySelector("#prepDetails").value;
         const imagePath = document.querySelector(".img-selected").src;
-        console.log(imagePath);
 
         let ingreds, i, steps, x;
         ingreds = document.querySelectorAll(".ingredient");
@@ -340,13 +343,12 @@ function getListDetails(id) {
                     <td colspan="3">
                         <form action="#">
                           <div class="mdl-textfield mdl-js-textfield">
-                            <input class="mdl-textfield__input" type="text" id="addListItem">
+                            <input class="mdl-textfield__input" type="text" id="addListItem" placeholder="Type new item here">
                           </div>
                           <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="${listDetails[0]._id}" onclick="addNewTodoItem(this.id)">                       
                             <i class="material-icons">library_add</i>
                           </button>
                         </form>
-                        <p style="text-align: left">+ Add New List Item</p>
                     </td>
                 </tr>
             </tbody>
@@ -355,6 +357,12 @@ function getListDetails(id) {
     checkboxLabel.forEach(checkbox => {
         checkbox.removeAttribute("data-upgraded");
     })
+}
+document.getElementById("addRecipeDialog").onkeypress = function(e) {
+    var key = e.charCode || e.keyCode || 0;
+    if (key == 13) {
+        e.preventDefault();
+    }
 }
 if (listForm) {
     listForm.addEventListener('submit', (e) => {
@@ -433,7 +441,6 @@ function showIngredientsDialog(details) {
         // listItems += `<li class="mdl-menu__item" data-val="${index}">${list.listTitle}</li>`
         listItems += `<option value="${list._id}">${list.listTitle}</option>`
     })
-    console.log(listItems);
     document.getElementById("ingredsTable").innerHTML =
             `<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp" id="listTable">
              <thead>
@@ -483,8 +490,6 @@ function addIngredientToList() {
         }
         addedIngreds.push(todoObj);
     })
-    console.log(addedIngreds);
-    console.log(id);
 
     axios.put(`/api/addIngreds/${id}`, addedIngreds)
         .then(function () {
@@ -501,7 +506,6 @@ function addIngredientToList() {
 
 function toggleEditRecipe() {
     const recipeDetails = selectedRecipeDetails;
-    console.log(recipeDetails);
     document.querySelector('#editTitle').value = recipeDetails.title;
     document.querySelector('#editSubTitle').value = recipeDetails.subTitle;
     document.querySelector('#editTotalHours').value = recipeDetails.totalHours;
@@ -578,6 +582,12 @@ function editAddDirections() {
     directionsContainer.classList.remove("is-upgraded");
     directionsContainer.removeAttribute("data-upgraded");
     componentHandler.upgradeDom();
+}
+document.getElementById("editDialog").onkeypress = function(e) {
+    var key = e.charCode || e.keyCode || 0;
+    if (key == 13) {
+        e.preventDefault();
+    }
 }
 function updateRecipe(){
     const ingredients = [];
@@ -732,4 +742,8 @@ if (addListDialog) {
     });
 }
 
+function closeDialog() {
+    addListDialog.close();
+    addRecipeDialog.close();
+}
 
