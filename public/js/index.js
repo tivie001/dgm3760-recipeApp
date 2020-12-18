@@ -1,5 +1,6 @@
 const url = 'https://recipe-app-dgm3760.herokuapp.com/'
 const imageURL = "https://api.unsplash.com/";
+const API_KEY = 'eRc8A7PplvKHhAGhzHyRcYKg4sgGLvgWN7MmZ_TtP5I';
 let searchedImages;
 let recipes = [];
 let lists = [];
@@ -631,7 +632,7 @@ function searchImages(){
     const searchTerm = document.querySelector('#imgSearch').value;
     const imageContainer = document.getElementById("imageContainer");
     let newImg;
-    fetch(imageURL + `search/photos?client_id=${process.env.API_KEY}&query=${searchTerm}&orientation=landscape&per_page=20`, {
+    fetch(imageURL + `search/photos?client_id=${API_KEY}&query=${searchTerm}&orientation=landscape&per_page=20`, {
         headers: {
             "Accept-Version": "v1"
         }
@@ -714,7 +715,6 @@ function addNewTodoItem() {
             console.log(error);
         })
 }
-// let dialog = document.querySelector('dialog');
 let addRecipeDialog = document.getElementById('addRecipeDialog');
 let addListDialog = document.getElementById('addListDialog');
 let showRecipeDialogButton = document.querySelector('#showDialog');
