@@ -9,9 +9,9 @@ const PORT = 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
-const mongoURI = 'mongodb+srv://dbAdminUser:r11r2jFZkQ9VhIdQ@nodestorecluster.ob64v.mongodb.net/recipe?retryWrites=true&w=majority';
+// const mongoURI = 'mongodb+srv://dbAdminUser:r11r2jFZkQ9VhIdQ@nodestorecluster.ob64v.mongodb.net/recipe?retryWrites=true&w=majority';
 
-mongoose.connect(mongoURI,
+mongoose.connect(process.env.MONGODB_URI,
     {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.listen(process.env.PORT || 3000, () =>{
