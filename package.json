@@ -4,7 +4,8 @@
   "description": "Full stack web recipe app (i.e. Vanilla HTML, CSS, & JS, NodeJS server (ExpressJS), & MongoDB",
   "main": "public/js/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
