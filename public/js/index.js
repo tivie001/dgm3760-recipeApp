@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000'
+const url = 'https://recipe-app-dgm3760.herokuapp.com/'
 const imageURL = "https://api.unsplash.com/";
 // const API_KEY = 'eRc8A7PplvKHhAGhzHyRcYKg4sgGLvgWN7MmZ_TtP5I';
 let searchedImages;
