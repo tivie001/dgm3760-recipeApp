@@ -487,7 +487,7 @@ function addIngredientToList() {
             getLists();
             document.getElementById("listDetailsContainer").innerHTML = ''
             getListDetails(id);
-            closeModal();
+            closeDialog();
         })
         .catch(function (error) {
             console.log(error);
@@ -622,7 +622,7 @@ function updateRecipe(){
     axios.put(`/api/${id}`, bodyData)
         .then(function () {
             getRecipeDetails(id);
-            closeModal();
+            closeDialog();
         })
         .catch(function (error) {
             console.log(error);
