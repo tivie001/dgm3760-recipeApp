@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Recipe = require('./models/recipeModel');
 const List = require('./models/listModel');
-require('dotenv/config');
+// require('dotenv/config');
 const app = express();
 const PORT = 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
