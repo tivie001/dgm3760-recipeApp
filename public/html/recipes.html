@@ -159,7 +159,7 @@
                       <hr>
                       <div id="directions">
                           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                              <input class="mdl-textfield__input direction" type="text" id="direction" name="directions">
+                              <textarea class="mdl-textfield__input edit-direction" type="text" rows= "3" id="direction"></textarea>
                               <label class="mdl-textfield__label" for="direction">New Step</label>
                           </div>
                       </div>
@@ -276,7 +276,7 @@
                           <button type="submit" class="mdl-button mdl-js-button mdl-button--colored mdl-button--raised mdl-js-ripple-effect close" onclick="updateRecipe()">
                               Save Changes
                           </button>
-                          <button type="button" class="mdl-button close" style="color: red" onclick="closeModal()">Cancel</button>
+                          <button type="button" class="mdl-button close" style="color: red" onclick="closeDialog()">Cancel</button>
                       </div>
                       <div style="text-align: center; margin-top: 2rem">
                           <button type="button" class="mdl-button close" style="color: red" onclick="deleteRecipe()">

@@ -7,9 +7,12 @@ let lists = [];
 let images = [];
 let selectedRecipeDetails = [];
 let selectedListDetails = [];
+let recipeDetails;
 let toggleDeleteList = false;
 const recipeForm = document.querySelector('#addRecipeForm');
 const listForm = document.querySelector('#addListForm');
+const editDialog = document.getElementById("editDialog")
+const addDialog = document.getElementById("addRecipeDialog")
 
 function getRecipes() {
     axios.get('/api')
@@ -134,22 +137,17 @@ function getRecipeDetails(id) {
         editDialog.close();
     });
 }
-function closeModal() {
-    const recipeDialog = document.getElementById('addRecipeDialog');
-    const ingredsDialog = document.getElementById('ingredsDialog');
-    const editDialog = document.getElementById('editDialog');
-    recipeDialog.close();
-    ingredsDialog.close();
-    editDialog.close();
-}
 
 // ******* ADD RECIPE (POST) *******
-document.getElementById("addRecipeDialog").onkeypress = function(e) {
-    var key = e.charCode || e.keyCode || 0;
-    if (key == 13) {
-        e.preventDefault();
+if (addDialog) {
+    addDialog.onkeypress = function(e) {
+        var key = e.charCode || e.keyCode || 0;
+        if (key == 13) {
+            e.preventDefault();
+        }
     }
 }
+
 if (recipeForm){
     recipeForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -210,11 +208,11 @@ if (recipeForm){
 }
 function deleteRecipe() {
     axios.delete(`/api/${selectedRecipeDetails._id}`)
-        .then(function () {
-            closeModal();
+        .then(function (recipes) {
+            closeDialog();
             document.getElementById("cardContainer").innerHTML = '';
             document.getElementById("selectRecipeText").style.display = "flex";
-            document.getElementById("recipeNameTable").innerHTML = getRecipes();
+            document.getElementById("recipeNameTable").innerHTML = getRecipes(recipes);
             getLists();
         })
         .catch(function (error) {
@@ -234,7 +232,7 @@ function addIngredient() {
 }
 function addDirections() {
     var str = '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">\n' +
-        '                  <input class="mdl-textfield__input direction" type="text" id="ingredient">\n' +
+        '                  <textarea class="mdl-textfield__input edit-direction" type="text" rows= "3" id="direction"></textarea>\n' +
         '                  <label class="mdl-textfield__label" for="ingredient">New Step</label>\n' +
         '                </div>'
     directionsContainer = document.getElementById( 'directions');
@@ -358,12 +356,6 @@ function getListDetails(id) {
         checkbox.removeAttribute("data-upgraded");
     })
 }
-document.getElementById("addRecipeDialog").onkeypress = function(e) {
-    var key = e.charCode || e.keyCode || 0;
-    if (key == 13) {
-        e.preventDefault();
-    }
-}
 if (listForm) {
     listForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -438,7 +430,6 @@ function deleteTodoItem(index) {
 function showIngredientsDialog(details) {
     let listItems = '';
     lists.forEach((list, index) => {
-        // listItems += `<li class="mdl-menu__item" data-val="${index}">${list.listTitle}</li>`
         listItems += `<option value="${list._id}">${list.listTitle}</option>`
     })
     document.getElementById("ingredsTable").innerHTML =
@@ -505,7 +496,8 @@ function addIngredientToList() {
 }
 
 function toggleEditRecipe() {
-    const recipeDetails = selectedRecipeDetails;
+    recipeDetails = selectedRecipeDetails;
+    console.log(recipeDetails);
     document.querySelector('#editTitle').value = recipeDetails.title;
     document.querySelector('#editSubTitle').value = recipeDetails.subTitle;
     document.querySelector('#editTotalHours').value = recipeDetails.totalHours;
@@ -522,21 +514,20 @@ function toggleEditRecipe() {
                              <input class="mdl-textfield__input edit-ingredient" value="${ingred}" id="${index}" type="text" id="editIngredient">
                              <label class="mdl-textfield__label" for="editIngredient">New Ingredient</label>
                          </div> 
-                         <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="removeIndex(this.id)">
+                         <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="removeIngredIndex(this.id)">
                             <i class="material-icons">delete</i>
                          </button></section>`
         ingredientsContainer.insertAdjacentHTML( 'beforeend', str );
     })
     directionsContainer = document.getElementById( 'editDirections');
     recipeDetails.directions.forEach((direct, index) => {
-        var str = `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs">
-                             <input class="mdl-textfield__input edit-direction" value="${direct}" id="${index}" type="text" id="editDirection">
+        var str = `<section id="${index}"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label editable-inputs">
+                             <textarea class="mdl-textfield__input edit-direction" id="${index}" type="text" id="editDirection">${direct}</textarea>
                              <label class="mdl-textfield__label" for="editDirection">New Step</label>
                          </div>
-                         <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" onclick="removeIndex()">
+                         <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="removeDirectIndex(this.id)">
                             <i class="material-icons">delete</i>
-                         </button>
-                        `
+                         </button></section>`
         directionsContainer.insertAdjacentHTML( 'beforeend', str );
     })
 
@@ -546,7 +537,7 @@ function toggleEditRecipe() {
         componentHandler.upgradeDom();
     })
 }
-function removeIndex(index) {
+function removeIngredIndex(index) {
     ingredientsContainer = document.getElementById( 'editIngredients');
     const ingredientDiv = ingredientsContainer.getElementsByTagName("section")[index];
     const input = ingredientDiv.getElementsByClassName('edit-ingredient');
@@ -554,13 +545,21 @@ function removeIndex(index) {
     ingredientDiv.classList.add('hide-element');
     input[0].classList.remove('edit-ingredient');
 }
+function removeDirectIndex(index) {
+    directionsContainer = document.getElementById( 'editDirections');
+    const directionsDiv = directionsContainer.getElementsByTagName("section")[index];
+    const input = directionsDiv.getElementsByClassName('edit-direction');
+    selectedRecipeDetails.directions.splice(index, 1);
+    directionsDiv.classList.add('hide-element');
+    input[0].classList.remove('edit-direction');
+}
 function editAddIngredients() {
     const index = (selectedRecipeDetails.ingredients.length);
     var str = `<section id="${index}"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                     <input class="mdl-textfield__input edit-ingredient" type="text" id="editIngredient">
                     <label class="mdl-textfield__label" for="editIngredient">New Ingredient</label>
                </div>
-              <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="removeIndex(this.id)">                       
+              <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="removeIngredIndex(this.id)">                       
                 <i class="material-icons">delete</i>
               </button></section>`
     ingredientsContainer = document.getElementById( 'editIngredients');
@@ -570,23 +569,25 @@ function editAddIngredients() {
     componentHandler.upgradeDom();
 }
 function editAddDirections() {
-    var str = '<section><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">\n' +
-        '                  <input class="mdl-textfield__input edit-direction" type="text" id="editDirection">\n' +
-        '                  <label class="mdl-textfield__label" for="editDirection">New Step</label>\n' +
-        '                </div> ' +
-        '                       <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" onclick="removeIndex()">\n                                ' +
-        '                           <i class="material-icons">delete</i>\n                             ' +
-        '                       </button></section>'
+    var str = `<section id="${index}"><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                          <textarea class="mdl-textfield__input edit-direction" type="text" rows= "3" id="editDirection"></textarea>
+                          <label class="mdl-textfield__label" for="editDirection">New Step</label>
+                        </div>
+                               <button type="button" class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect trash-icon" id="${index}" onclick="removeDirectIndex(this.id)">                                ' +
+                                   <i class="material-icons">delete</i>
+                               </button></section>`
     directionsContainer = document.getElementById( 'editDirections');
     directionsContainer.insertAdjacentHTML( 'beforeend', str );
     directionsContainer.classList.remove("is-upgraded");
     directionsContainer.removeAttribute("data-upgraded");
     componentHandler.upgradeDom();
 }
-document.getElementById("editDialog").onkeypress = function(e) {
-    var key = e.charCode || e.keyCode || 0;
-    if (key == 13) {
-        e.preventDefault();
+if (editDialog) {
+    editDialog.onkeypress = function(e) {
+        var key = e.charCode || e.keyCode || 0;
+        if (key == 13) {
+            e.preventDefault();
+        }
     }
 }
 function updateRecipe(){
@@ -743,7 +744,14 @@ if (addListDialog) {
 }
 
 function closeDialog() {
-    addListDialog.close();
-    addRecipeDialog.close();
+    if (addListDialog) {
+        addListDialog.close();
+    }
+    if (addRecipeDialog) {
+        addRecipeDialog.close();
+    }
+    if (editDialog) {
+        editDialog.close();
+    }
 }
 
