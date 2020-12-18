@@ -2,7 +2,7 @@
 ### Created by: Tyler Ivie
 Full stack web recipe app (i.e. Vanilla HTML, CSS, &amp; JS, NodeJS server (ExpressJS), &amp; MongoDB
 
-[Recipe App URL](https://getmdl.io/)
+[Recipe App URL](https://recipe-app-dgm3760.herokuapp.com/index.html)
 
 ----------------------------------------------------------
 
